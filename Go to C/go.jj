@@ -27,12 +27,11 @@ TOKEN :
 | < LBRACE: "{" >
 | < RBRACE: "}" >
 | < SEMICOLON: ";" >
+| < COLON: ":" >
 | < DOT: "." >
-| < ASSIGN: ":=" >
+| < ASSIGN: "=" >
 | < LT: "<" >
-| < LTE: "<=" >
 | < GT: ">" >
-| < GTE: ">=" >
 | < PLUS: "+" >
 | < MINUS: "-" >
 | < STAR: "*" >
@@ -46,19 +45,21 @@ TOKEN :
 | < FALSE: "false" >
 | < IF: "if" >
 | < WHILE: "while" >
+| < FOR : "for" >
 | < INTEGER: "int" >   
 | < NEW: "new" >
 | < PUBLIC: "public" >
 | < RETURN: "return" >
 | < STATIC: "static" >
 | < TRUE: "true" >
-| < PRINT: "fmt.Println" >
+| < PRINT1: "fmt.Println" >
+| < PRINT2: "fmt.Printf" >
 | < VOID: "void" >
 | < PACKAGE: "package" >
 | < IMPORT: "import" >
 | < FUNC : "func" >
 | < VAR : "var" >
-| < FOR : "for" >
+| < MAIN : "main" >
 }
 
 TOKEN : /* LITERALS */
@@ -138,28 +139,89 @@ void Goal() :
 void Packages() :
 {}
 {
-  "package" Identifier()
+  LOOKAHEAD(2)
+  PackageOther()
+|
+  PackageMain()
 }
+
+void PackageOther() :
+{}
+{
+	"package" Identifier()
+}
+
+void PackageMain() :
+{}
+{
+	"package" "main"
+}
+
 
 void Imports() :
 {}
 {
   LOOKAHEAD(2)
-  "import" "\"" Identifier() "\""
+  SingleImport()
 |
-  "import" "(" ( "\"" Identifier() "\"" )* ")"
+  MultipleImport()
+}
+
+void SingleImport() :
+{}
+{
+	"import" "\"" Identifier() "\""
+}
+
+void MultipleImport() :
+{}
+{
+	"import" "(" ( "\"" Identifier() "\"" )* ")"
 }
 
 void FunctionDeclaration() :
 {}
 {
-  "func" Identifier() Signature() [ Type() ] "{" ( VarDeclaration() )* ( Statement() )* [ "return" Expression() ] "}"
+  LOOKAHEAD(2)
+  MainFunctionDeclaration()
+|
+  OtherFunctionDeclaration()
+}
+
+void MainFunctionDeclaration() :
+{}
+{
+	"func" "main" "(" ")" "{" ( VarDeclaration() )* ( Statement() )* "}"
+}
+
+void OtherFunctionDeclaration() :
+{}
+{
+	"func" Identifier() Signature() [ Type() ] "{" ( VarDeclaration() )* ( Statement() )* [ ReturnExpression() ] "}"
+}
+
+void ReturnExpression() :
+{}
+{
+	"return" Expression()
 }
 
 void Signature() :
 {}
 {
-  "(" [ Identifier() [ Type() ] ("," Identifier() [ Type() ] )* ] ")"
+  "(" [ VarType()  ( CommaVarType() )* ] ")"
+}
+
+void VarType() :
+{}
+{
+	Identifier() Type()
+}
+
+void CommaVarType() :
+{}
+{
+	"," VarType()
 }
 
 void Type() :
@@ -177,17 +239,20 @@ void Identifier() :
 void Statement() :
 {}
 {
+  PrintStatement()
+|
   Block()
 | 
-  AssignmentStatement()
-|
   IfStatement()
 |
   WhileStatement()
 |
   ForStatement()
 |
-  PrintStatement()
+  LOOKAHEAD(3)
+  AssignmentStatement()
+|
+  Expression()
 }
 
 void Block() :
@@ -199,122 +264,173 @@ void Block() :
 void VarDeclaration() :
 {}
 {
-  "var" Identifier() ( "," Identifier() )* Type()
+  "var" Identifier() ( CommaIdentifier() )* Type()
 }
 
+void CommaIdentifier() :
+{}
+{
+	"," Identifier()
+}
 void AssignmentStatement() :
 {}
 {
-  Identifier() "=" Expression()
+  PrimaryExpression() AssignmentOperator() Expression()
+}
+
+void AssignmentOperator() :
+{}
+{
+  "=" | "*=" | "/=" | "%=" | "+=" | "-=" | "<<=" | ">>=" | "&=" | "^=" | "|="
 }
 
 void IfStatement() :
 {}
 {
-  "if" Expression() Statement() [ LOOKAHEAD(2) "else" Statement() ]
+  "if" Expression() Statement() [ LOOKAHEAD(2) ElseStatement() ]
+}
+
+void ElseStatement() :
+{}
+{
+	"else" Statement()
 }
 
 void WhileStatement() :
 {}
 {
-  "while" Expression() "{" Statement() "}"
+  "while" Expression()  Statement() 
 }
 
 void ForStatement() :
 {}
 {
-  "for" [ AssignmentStatement() ] ";" [ Expression() ] ";" [ LOOKAHEAD(3) AssignmentStatement() | IncrementStatement() ] "{" Statement() "}"
-}
-
-void IncrementStatement() :
-{}
-{
-  "++" Identifier()
-|
-  "--" Identifier()
-|
-  LOOKAHEAD(2)
-  Identifier() "++"
-| 
-  Identifier() "--"
+  "for" [ AssignmentStatement() ] ";" [ Expression() ] ";" [ LOOKAHEAD(2) Statement() ]  Statement() 
 }
 
 void PrintStatement() :
 {}
 {
-  "fmt.Println" "(" Expression() ")"
+  PrintlnStatement()
   |
-  "fmt.Printf" "(" Expression() ")"
+  PrintfStatement()
+}
+
+void PrintlnStatement() :
+{}
+{
+	"fmt.Println" StringPrint()
+}
+
+void PrintfStatement() :
+{}
+{
+	"fmt.Printf" StringPrint()
+}
+
+void StringPrint() :
+{}
+{
+	"(" StringMsg() ( CommaExpression() )* ")"
 }
 
 void Expression() :
 {}
 {
-  LOOKAHEAD( PrimaryExpression() "&" )
-  AndExpression()
-|
-  LOOKAHEAD( PrimaryExpression() "<" )
-  CompareExpression()
-|
-  LOOKAHEAD( PrimaryExpression() "==" )
-  EqualityExpression()
-|
-  LOOKAHEAD( PrimaryExpression() "+" )
-  PlusExpression()
-|
-  LOOKAHEAD( PrimaryExpression() "-" )
-  MinusExpression()
-|
-  LOOKAHEAD( PrimaryExpression() "*" )
-  TimesExpression()
-| 
-  PrimaryExpression()
+  PrimaryExpression() [ Operator() Expression() ]
 }
 
-void AndExpression() :
-{} 
-{
-  PrimaryExpression() "&" PrimaryExpression()
-}
-
-void CompareExpression() :
-{} 
-{
-  PrimaryExpression() "<" PrimaryExpression()
-}
-
-void EqualityExpression() :
-{} 
-{
-  PrimaryExpression() "==" PrimaryExpression()
-}
-
-void PlusExpression() :
+void Operator() :
 {}
 {
-  PrimaryExpression() "+" PrimaryExpression()
-}
-
-void MinusExpression() :
-{}
-{
-  PrimaryExpression() "-" PrimaryExpression()
-}
-
-void TimesExpression() :
-{}
-{
-  PrimaryExpression() "*" PrimaryExpression()
+  "+" | "-" | "*" | "/" | "%" | "<" | ">" | "==" | ">=" | "<=" | "!=" | ">>" | "<<" | "&" | "&&" | "|" | "||" | "^" | "^=" | "&=" | "|="
 }
 
 void PrimaryExpression() :
 {}
 {
   IntegerLiteral()
+| 
+  LOOKAHEAD(2)
+  Identifier() PostfixExpression()
+|
+  BracketExpression() ")"
+|
+  StringMsg()
 |
   Identifier()
+}
+
+void PostfixExpression() :
+{}
+{
+  ArrayAccessExpression()
 |
-  BracketExpression()
+  FunctionArgumentExpression()
+|
+  Increment()
+|
+  Decrement()
+}
+
+void Increment() :
+{}
+{
+	"++"
+}
+
+void Decrement() :
+{}
+{
+	"--"
+}
+
+void ArrayAccessExpression() :
+{}
+{
+	( SingleArrayAccessExpression() )+
+}
+
+void SingleArrayAccessExpression() :
+{}
+{
+	"[" Expression() "]"
+}
+
+void FunctionArgumentExpression() :
+{}
+{
+	"(" [ LOOKAHEAD( ArgumentExpressionList() ) ArgumentExpressionList() ] ")"
+}
+
+void ArgumentExpressionList() :
+{}
+{
+  Expression() ( CommaExpression() )*
+}
+
+void CommaExpression() :
+{}
+{
+	"," Expression()
+}
+
+void BracketExpression() :
+{}
+{
+  "(" Expression()
+}
+
+void StringMsg() :
+{}
+{
+  "\"" ( SubStrinMsg() )* "\""
+}
+
+void SubStrinMsg() :
+{}
+{
+	Identifier() | "." | Operator() | "," | "\\"
 }
 
 void IntegerLiteral() :
@@ -322,13 +438,3 @@ void IntegerLiteral() :
 {
   <INTEGER_LITERAL>
 }
-
-void BracketExpression() :
-{}
-{
-  "(" Expression() ")"
-}
-
-//need to fix compound expressions and function calls and printstatement
-
-

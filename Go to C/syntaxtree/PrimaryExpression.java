@@ -7,8 +7,10 @@ package syntaxtree;
 /**
  * Grammar production:
  * f0 -> IntegerLiteral()
+ *       | Identifier() PostfixExpression()
+ *       | BracketExpression() ")"
+ *       | StringMsg()
  *       | Identifier()
- *       | BracketExpression()
  */
 public class PrimaryExpression implements Node {
    public NodeChoice f0;

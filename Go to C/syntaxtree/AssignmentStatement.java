@@ -6,25 +6,19 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> Identifier()
- * f1 -> "="
+ * f0 -> PrimaryExpression()
+ * f1 -> AssignmentOperator()
  * f2 -> Expression()
  */
 public class AssignmentStatement implements Node {
-   public Identifier f0;
-   public NodeToken f1;
+   public PrimaryExpression f0;
+   public AssignmentOperator f1;
    public Expression f2;
 
-   public AssignmentStatement(Identifier n0, NodeToken n1, Expression n2) {
+   public AssignmentStatement(PrimaryExpression n0, AssignmentOperator n1, Expression n2) {
       f0 = n0;
       f1 = n1;
       f2 = n2;
-   }
-
-   public AssignmentStatement(Identifier n0, Expression n1) {
-      f0 = n0;
-      f1 = new NodeToken("=");
-      f2 = n1;
    }
 
    public void accept(visitor.Visitor v) {

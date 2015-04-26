@@ -29,43 +29,43 @@ public interface GoParserConstants {
   /** RegularExpression Id. */
   int SEMICOLON = 15;
   /** RegularExpression Id. */
-  int DOT = 16;
+  int COLON = 16;
   /** RegularExpression Id. */
-  int ASSIGN = 17;
+  int DOT = 17;
   /** RegularExpression Id. */
-  int LT = 18;
+  int ASSIGN = 18;
   /** RegularExpression Id. */
-  int LTE = 19;
+  int LT = 19;
   /** RegularExpression Id. */
   int GT = 20;
   /** RegularExpression Id. */
-  int GTE = 21;
+  int PLUS = 21;
   /** RegularExpression Id. */
-  int PLUS = 22;
+  int MINUS = 22;
   /** RegularExpression Id. */
-  int MINUS = 23;
+  int STAR = 23;
   /** RegularExpression Id. */
-  int STAR = 24;
+  int DIVIDE = 24;
   /** RegularExpression Id. */
-  int DIVIDE = 25;
+  int MODULO = 25;
   /** RegularExpression Id. */
-  int MODULO = 26;
+  int AND = 26;
   /** RegularExpression Id. */
-  int AND = 27;
+  int OR = 27;
   /** RegularExpression Id. */
-  int OR = 28;
+  int NOT = 28;
   /** RegularExpression Id. */
-  int NOT = 29;
+  int BOOLEAN = 29;
   /** RegularExpression Id. */
-  int BOOLEAN = 30;
+  int ELSE = 30;
   /** RegularExpression Id. */
-  int ELSE = 31;
+  int FALSE = 31;
   /** RegularExpression Id. */
-  int FALSE = 32;
+  int IF = 32;
   /** RegularExpression Id. */
-  int IF = 33;
+  int WHILE = 33;
   /** RegularExpression Id. */
-  int WHILE = 34;
+  int FOR = 34;
   /** RegularExpression Id. */
   int INTEGER = 35;
   /** RegularExpression Id. */
@@ -79,27 +79,29 @@ public interface GoParserConstants {
   /** RegularExpression Id. */
   int TRUE = 40;
   /** RegularExpression Id. */
-  int PRINT = 41;
+  int PRINT1 = 41;
   /** RegularExpression Id. */
-  int VOID = 42;
+  int PRINT2 = 42;
   /** RegularExpression Id. */
-  int PACKAGE = 43;
+  int VOID = 43;
   /** RegularExpression Id. */
-  int IMPORT = 44;
+  int PACKAGE = 44;
   /** RegularExpression Id. */
-  int FUNC = 45;
+  int IMPORT = 45;
   /** RegularExpression Id. */
-  int VAR = 46;
+  int FUNC = 46;
   /** RegularExpression Id. */
-  int FOR = 47;
+  int VAR = 47;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 48;
+  int MAIN = 48;
   /** RegularExpression Id. */
-  int IDENTIFIER = 49;
+  int INTEGER_LITERAL = 49;
   /** RegularExpression Id. */
-  int LETTER = 50;
+  int IDENTIFIER = 50;
   /** RegularExpression Id. */
-  int DIGIT = 51;
+  int LETTER = 51;
+  /** RegularExpression Id. */
+  int DIGIT = 52;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -122,12 +124,11 @@ public interface GoParserConstants {
     "\"{\"",
     "\"}\"",
     "\";\"",
+    "\":\"",
     "\".\"",
-    "\":=\"",
+    "\"=\"",
     "\"<\"",
-    "\"<=\"",
     "\">\"",
-    "\">=\"",
     "\"+\"",
     "\"-\"",
     "\"*\"",
@@ -141,6 +142,7 @@ public interface GoParserConstants {
     "\"false\"",
     "\"if\"",
     "\"while\"",
+    "\"for\"",
     "\"int\"",
     "\"new\"",
     "\"public\"",
@@ -148,23 +150,41 @@ public interface GoParserConstants {
     "\"static\"",
     "\"true\"",
     "\"fmt.Println\"",
+    "\"fmt.Printf\"",
     "\"void\"",
     "\"package\"",
     "\"import\"",
     "\"func\"",
     "\"var\"",
-    "\"for\"",
+    "\"main\"",
     "<INTEGER_LITERAL>",
     "<IDENTIFIER>",
     "<LETTER>",
     "<DIGIT>",
     "\"\\\"\"",
     "\",\"",
-    "\"=\"",
+    "\"*=\"",
+    "\"/=\"",
+    "\"%=\"",
+    "\"+=\"",
+    "\"-=\"",
+    "\"<<=\"",
+    "\">>=\"",
+    "\"&=\"",
+    "\"^=\"",
+    "\"|=\"",
+    "\"==\"",
+    "\">=\"",
+    "\"<=\"",
+    "\"!=\"",
+    "\">>\"",
+    "\"<<\"",
+    "\"&&\"",
+    "\"||\"",
+    "\"^\"",
     "\"++\"",
     "\"--\"",
-    "\"fmt.Printf\"",
-    "\"==\"",
+    "\"\\\\\"",
   };
 
 }

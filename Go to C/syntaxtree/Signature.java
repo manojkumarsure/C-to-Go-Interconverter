@@ -7,7 +7,7 @@ package syntaxtree;
 /**
  * Grammar production:
  * f0 -> "("
- * f1 -> [ Identifier() [ Type() ] ( "," Identifier() [ Type() ] )* ]
+ * f1 -> [ VarType() ( CommaVarType() )* ]
  * f2 -> ")"
  */
 public class Signature implements Node {

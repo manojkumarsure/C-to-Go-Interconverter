@@ -8,7 +8,7 @@ package syntaxtree;
  * Grammar production:
  * f0 -> "var"
  * f1 -> Identifier()
- * f2 -> ( "," Identifier() )*
+ * f2 -> ( CommaIdentifier() )*
  * f3 -> Type()
  */
 public class VarDeclaration implements Node {

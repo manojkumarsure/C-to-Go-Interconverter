@@ -65,20 +65,92 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
+    * f0 -> PackageOther()
+    *       | PackageMain()
+    */
+   public void visit(Packages n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
     * f0 -> "package"
     * f1 -> Identifier()
     */
-   public void visit(Packages n, A argu) {
+   public void visit(PackageOther n, A argu) {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
    }
 
    /**
-    * f0 -> "import" "\"" Identifier() "\""
-    *       | "import" "(" ( "\"" Identifier() "\"" )* ")"
+    * f0 -> "package"
+    * f1 -> "main"
+    */
+   public void visit(PackageMain n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> SingleImport()
+    *       | MultipleImport()
     */
    public void visit(Imports n, A argu) {
       n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "import"
+    * f1 -> "\""
+    * f2 -> Identifier()
+    * f3 -> "\""
+    */
+   public void visit(SingleImport n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "import"
+    * f1 -> "("
+    * f2 -> ( "\"" Identifier() "\"" )*
+    * f3 -> ")"
+    */
+   public void visit(MultipleImport n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+   }
+
+   /**
+    * f0 -> MainFunctionDeclaration()
+    *       | OtherFunctionDeclaration()
+    */
+   public void visit(FunctionDeclaration n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "func"
+    * f1 -> "main"
+    * f2 -> "("
+    * f3 -> ")"
+    * f4 -> "{"
+    * f5 -> ( VarDeclaration() )*
+    * f6 -> ( Statement() )*
+    * f7 -> "}"
+    */
+   public void visit(MainFunctionDeclaration n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+      n.f4.accept(this, argu);
+      n.f5.accept(this, argu);
+      n.f6.accept(this, argu);
+      n.f7.accept(this, argu);
    }
 
    /**
@@ -89,10 +161,10 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f4 -> "{"
     * f5 -> ( VarDeclaration() )*
     * f6 -> ( Statement() )*
-    * f7 -> [ "return" Expression() ]
+    * f7 -> [ ReturnExpression() ]
     * f8 -> "}"
     */
-   public void visit(FunctionDeclaration n, A argu) {
+   public void visit(OtherFunctionDeclaration n, A argu) {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
@@ -105,14 +177,41 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
+    * f0 -> "return"
+    * f1 -> Expression()
+    */
+   public void visit(ReturnExpression n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
     * f0 -> "("
-    * f1 -> [ Identifier() [ Type() ] ( "," Identifier() [ Type() ] )* ]
+    * f1 -> [ VarType() ( CommaVarType() )* ]
     * f2 -> ")"
     */
    public void visit(Signature n, A argu) {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> Type()
+    */
+   public void visit(VarType n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> ","
+    * f1 -> VarType()
+    */
+   public void visit(CommaVarType n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
    }
 
    /**
@@ -130,12 +229,13 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
-    * f0 -> Block()
-    *       | AssignmentStatement()
+    * f0 -> PrintStatement()
+    *       | Block()
     *       | IfStatement()
     *       | WhileStatement()
     *       | ForStatement()
-    *       | PrintStatement()
+    *       | AssignmentStatement()
+    *       | Expression()
     */
    public void visit(Statement n, A argu) {
       n.f0.accept(this, argu);
@@ -157,7 +257,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    /**
     * f0 -> "var"
     * f1 -> Identifier()
-    * f2 -> ( "," Identifier() )*
+    * f2 -> ( CommaIdentifier() )*
     * f3 -> Type()
     */
    public void visit(VarDeclaration n, A argu) {
@@ -168,8 +268,17 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
-    * f0 -> Identifier()
-    * f1 -> "="
+    * f0 -> ","
+    * f1 -> Identifier()
+    */
+   public void visit(CommaIdentifier n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> AssignmentOperator()
     * f2 -> Expression()
     */
    public void visit(AssignmentStatement n, A argu) {
@@ -179,10 +288,27 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
+    * f0 -> "="
+    *       | "*="
+    *       | "/="
+    *       | "%="
+    *       | "+="
+    *       | "-="
+    *       | "<<="
+    *       | ">>="
+    *       | "&="
+    *       | "^="
+    *       | "|="
+    */
+   public void visit(AssignmentOperator n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
     * f0 -> "if"
     * f1 -> Expression()
     * f2 -> Statement()
-    * f3 -> [ "else" Statement() ]
+    * f3 -> [ ElseStatement() ]
     */
    public void visit(IfStatement n, A argu) {
       n.f0.accept(this, argu);
@@ -192,18 +318,23 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
+    * f0 -> "else"
+    * f1 -> Statement()
+    */
+   public void visit(ElseStatement n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
     * f0 -> "while"
     * f1 -> Expression()
-    * f2 -> "{"
-    * f3 -> Statement()
-    * f4 -> "}"
+    * f2 -> Statement()
     */
    public void visit(WhileStatement n, A argu) {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
-      n.f3.accept(this, argu);
-      n.f4.accept(this, argu);
    }
 
    /**
@@ -212,10 +343,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f2 -> ";"
     * f3 -> [ Expression() ]
     * f4 -> ";"
-    * f5 -> [ AssignmentStatement() | IncrementStatement() ]
-    * f6 -> "{"
-    * f7 -> Statement()
-    * f8 -> "}"
+    * f5 -> [ Statement() ]
+    * f6 -> Statement()
     */
    public void visit(ForStatement n, A argu) {
       n.f0.accept(this, argu);
@@ -225,113 +354,193 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
       n.f6.accept(this, argu);
-      n.f7.accept(this, argu);
-      n.f8.accept(this, argu);
    }
 
    /**
-    * f0 -> "++" Identifier()
-    *       | "--" Identifier()
-    *       | Identifier() "++"
-    *       | Identifier() "--"
-    */
-   public void visit(IncrementStatement n, A argu) {
-      n.f0.accept(this, argu);
-   }
-
-   /**
-    * f0 -> "fmt.Println" "(" Expression() ")"
-    *       | "fmt.Printf" "(" Expression() ")"
+    * f0 -> PrintlnStatement()
+    *       | PrintfStatement()
     */
    public void visit(PrintStatement n, A argu) {
       n.f0.accept(this, argu);
    }
 
    /**
-    * f0 -> AndExpression()
-    *       | CompareExpression()
-    *       | EqualityExpression()
-    *       | PlusExpression()
-    *       | MinusExpression()
-    *       | TimesExpression()
-    *       | PrimaryExpression()
+    * f0 -> "fmt.Println"
+    * f1 -> StringPrint()
+    */
+   public void visit(PrintlnStatement n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "fmt.Printf"
+    * f1 -> StringPrint()
+    */
+   public void visit(PrintfStatement n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> StringMsg()
+    * f2 -> ( CommaExpression() )*
+    * f3 -> ")"
+    */
+   public void visit(StringPrint n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+   }
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> [ Operator() Expression() ]
     */
    public void visit(Expression n, A argu) {
       n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
    }
 
    /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "&"
-    * f2 -> PrimaryExpression()
+    * f0 -> "+"
+    *       | "-"
+    *       | "*"
+    *       | "/"
+    *       | "%"
+    *       | "<"
+    *       | ">"
+    *       | "=="
+    *       | ">="
+    *       | "<="
+    *       | "!="
+    *       | ">>"
+    *       | "<<"
+    *       | "&"
+    *       | "&&"
+    *       | "|"
+    *       | "||"
+    *       | "^"
+    *       | "^="
+    *       | "&="
+    *       | "|="
     */
-   public void visit(AndExpression n, A argu) {
+   public void visit(Operator n, A argu) {
       n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      n.f2.accept(this, argu);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "<"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(CompareExpression n, A argu) {
-      n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      n.f2.accept(this, argu);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "=="
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(EqualityExpression n, A argu) {
-      n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      n.f2.accept(this, argu);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "+"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(PlusExpression n, A argu) {
-      n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      n.f2.accept(this, argu);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "-"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(MinusExpression n, A argu) {
-      n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      n.f2.accept(this, argu);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "*"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(TimesExpression n, A argu) {
-      n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      n.f2.accept(this, argu);
    }
 
    /**
     * f0 -> IntegerLiteral()
+    *       | Identifier() PostfixExpression()
+    *       | BracketExpression() ")"
+    *       | StringMsg()
     *       | Identifier()
-    *       | BracketExpression()
     */
    public void visit(PrimaryExpression n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> ArrayAccessExpression()
+    *       | FunctionArgumentExpression()
+    *       | Increment()
+    *       | Decrement()
+    */
+   public void visit(PostfixExpression n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "++"
+    */
+   public void visit(Increment n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "--"
+    */
+   public void visit(Decrement n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> ( SingleArrayAccessExpression() )+
+    */
+   public void visit(ArrayAccessExpression n, A argu) {
+      n.f0.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "["
+    * f1 -> Expression()
+    * f2 -> "]"
+    */
+   public void visit(SingleArrayAccessExpression n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> [ ArgumentExpressionList() ]
+    * f2 -> ")"
+    */
+   public void visit(FunctionArgumentExpression n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+   }
+
+   /**
+    * f0 -> Expression()
+    * f1 -> ( CommaExpression() )*
+    */
+   public void visit(ArgumentExpressionList n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> ","
+    * f1 -> Expression()
+    */
+   public void visit(CommaExpression n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> Expression()
+    */
+   public void visit(BracketExpression n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+   }
+
+   /**
+    * f0 -> "\""
+    * f1 -> ( SubStrinMsg() )*
+    * f2 -> "\""
+    */
+   public void visit(StringMsg n, A argu) {
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+   }
+
+   /**
+    * f0 -> Identifier()
+    *       | "."
+    *       | Operator()
+    *       | ","
+    *       | "\\"
+    */
+   public void visit(SubStrinMsg n, A argu) {
       n.f0.accept(this, argu);
    }
 
@@ -340,17 +549,6 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     */
    public void visit(IntegerLiteral n, A argu) {
       n.f0.accept(this, argu);
-   }
-
-   /**
-    * f0 -> "("
-    * f1 -> Expression()
-    * f2 -> ")"
-    */
-   public void visit(BracketExpression n, A argu) {
-      n.f0.accept(this, argu);
-      n.f1.accept(this, argu);
-      n.f2.accept(this, argu);
    }
 
 }

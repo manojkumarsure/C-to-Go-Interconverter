@@ -6,19 +6,16 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> AndExpression()
- *       | CompareExpression()
- *       | EqualityExpression()
- *       | PlusExpression()
- *       | MinusExpression()
- *       | TimesExpression()
- *       | PrimaryExpression()
+ * f0 -> PrimaryExpression()
+ * f1 -> [ Operator() Expression() ]
  */
 public class Expression implements Node {
-   public NodeChoice f0;
+   public PrimaryExpression f0;
+   public NodeOptional f1;
 
-   public Expression(NodeChoice n0) {
+   public Expression(PrimaryExpression n0, NodeOptional n1) {
       f0 = n0;
+      f1 = n1;
    }
 
    public void accept(visitor.Visitor v) {

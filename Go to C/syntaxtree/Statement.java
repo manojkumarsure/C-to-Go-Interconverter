@@ -6,12 +6,13 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> Block()
- *       | AssignmentStatement()
+ * f0 -> PrintStatement()
+ *       | Block()
  *       | IfStatement()
  *       | WhileStatement()
  *       | ForStatement()
- *       | PrintStatement()
+ *       | AssignmentStatement()
+ *       | Expression()
  */
 public class Statement implements Node {
    public NodeChoice f0;

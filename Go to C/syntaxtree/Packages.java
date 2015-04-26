@@ -6,21 +6,14 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> "package"
- * f1 -> Identifier()
+ * f0 -> PackageOther()
+ *       | PackageMain()
  */
 public class Packages implements Node {
-   public NodeToken f0;
-   public Identifier f1;
+   public NodeChoice f0;
 
-   public Packages(NodeToken n0, Identifier n1) {
+   public Packages(NodeChoice n0) {
       f0 = n0;
-      f1 = n1;
-   }
-
-   public Packages(Identifier n0) {
-      f0 = new NodeToken("package");
-      f1 = n0;
    }
 
    public void accept(visitor.Visitor v) {

@@ -6,49 +6,14 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> "func"
- * f1 -> Identifier()
- * f2 -> Signature()
- * f3 -> [ Type() ]
- * f4 -> "{"
- * f5 -> ( VarDeclaration() )*
- * f6 -> ( Statement() )*
- * f7 -> [ "return" Expression() ]
- * f8 -> "}"
+ * f0 -> MainFunctionDeclaration()
+ *       | OtherFunctionDeclaration()
  */
 public class FunctionDeclaration implements Node {
-   public NodeToken f0;
-   public Identifier f1;
-   public Signature f2;
-   public NodeOptional f3;
-   public NodeToken f4;
-   public NodeListOptional f5;
-   public NodeListOptional f6;
-   public NodeOptional f7;
-   public NodeToken f8;
+   public NodeChoice f0;
 
-   public FunctionDeclaration(NodeToken n0, Identifier n1, Signature n2, NodeOptional n3, NodeToken n4, NodeListOptional n5, NodeListOptional n6, NodeOptional n7, NodeToken n8) {
+   public FunctionDeclaration(NodeChoice n0) {
       f0 = n0;
-      f1 = n1;
-      f2 = n2;
-      f3 = n3;
-      f4 = n4;
-      f5 = n5;
-      f6 = n6;
-      f7 = n7;
-      f8 = n8;
-   }
-
-   public FunctionDeclaration(Identifier n0, Signature n1, NodeOptional n2, NodeListOptional n3, NodeListOptional n4, NodeOptional n5) {
-      f0 = new NodeToken("func");
-      f1 = n0;
-      f2 = n1;
-      f3 = n2;
-      f4 = new NodeToken("{");
-      f5 = n3;
-      f6 = n4;
-      f7 = n5;
-      f8 = new NodeToken("}");
    }
 
    public void accept(visitor.Visitor v) {

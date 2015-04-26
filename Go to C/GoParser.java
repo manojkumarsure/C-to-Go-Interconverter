@@ -36,91 +36,64 @@ public class GoParser implements GoParserConstants {
   }
 
   static final public Packages Packages() throws ParseException {
+   NodeChoice n0;
+   PackageOther n1;
+   PackageMain n2;
+    if (jj_2_1(2)) {
+      n1 = PackageOther();
+        n0 = new NodeChoice(n1, 0);
+    } else {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PACKAGE:
+        n2 = PackageMain();
+        n0 = new NodeChoice(n2, 1);
+        break;
+      default:
+        jj_la1[1] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    }
+     {if (true) return new Packages(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public PackageOther PackageOther() throws ParseException {
    NodeToken n0;
    Token n1;
    Identifier n2;
     n1 = jj_consume_token(PACKAGE);
                   n0 = JTBToolkit.makeNodeToken(n1);
     n2 = Identifier();
-     {if (true) return new Packages(n0,n2);}
+     {if (true) return new PackageOther(n0,n2);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public PackageMain PackageMain() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   NodeToken n2;
+   Token n3;
+    n1 = jj_consume_token(PACKAGE);
+                  n0 = JTBToolkit.makeNodeToken(n1);
+    n3 = jj_consume_token(MAIN);
+               n2 = JTBToolkit.makeNodeToken(n3);
+     {if (true) return new PackageMain(n0,n2);}
     throw new Error("Missing return statement in function");
   }
 
   static final public Imports Imports() throws ParseException {
    NodeChoice n0;
-   NodeSequence n1;
-   NodeToken n2;
-   Token n3;
-   NodeToken n4;
-   Token n5;
-   Identifier n6;
-   NodeToken n7;
-   Token n8;
-   NodeSequence n9;
-   NodeToken n10;
-   Token n11;
-   NodeToken n12;
-   Token n13;
-   NodeListOptional n14 = new NodeListOptional();
-   NodeSequence n15;
-   NodeToken n16;
-   Token n17;
-   Identifier n18;
-   NodeToken n19;
-   Token n20;
-   NodeToken n21;
-   Token n22;
-    if (jj_2_1(2)) {
-        n1 = new NodeSequence(5);
-      n3 = jj_consume_token(IMPORT);
-                    n2 = JTBToolkit.makeNodeToken(n3);
-        n1.addNode(n2);
-      n5 = jj_consume_token(52);
-                n4 = JTBToolkit.makeNodeToken(n5);
-        n1.addNode(n4);
-      n6 = Identifier();
-        n1.addNode(n6);
-      n8 = jj_consume_token(52);
-                n7 = JTBToolkit.makeNodeToken(n8);
-        n1.addNode(n7);
+   SingleImport n1;
+   MultipleImport n2;
+    if (jj_2_2(2)) {
+      n1 = SingleImport();
         n0 = new NodeChoice(n1, 0);
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case IMPORT:
-        n9 = new NodeSequence(4);
-        n11 = jj_consume_token(IMPORT);
-                     n10 = JTBToolkit.makeNodeToken(n11);
-        n9.addNode(n10);
-        n13 = jj_consume_token(LPAREN);
-                n12 = JTBToolkit.makeNodeToken(n13);
-        n9.addNode(n12);
-        label_2:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case 52:
-            ;
-            break;
-          default:
-            jj_la1[1] = jj_gen;
-            break label_2;
-          }
-           n15 = new NodeSequence(3);
-          n17 = jj_consume_token(52);
-                    n16 = JTBToolkit.makeNodeToken(n17);
-           n15.addNode(n16);
-          n18 = Identifier();
-           n15.addNode(n18);
-          n20 = jj_consume_token(52);
-                    n19 = JTBToolkit.makeNodeToken(n20);
-           n15.addNode(n19);
-           n14.addNode(n15);
-        }
-        n14.nodes.trimToSize();
-        n9.addNode(n14);
-        n22 = jj_consume_token(RPAREN);
-                n21 = JTBToolkit.makeNodeToken(n22);
-        n9.addNode(n21);
-        n0 = new NodeChoice(n9, 1);
+        n2 = MultipleImport();
+        n0 = new NodeChoice(n2, 1);
         break;
       default:
         jj_la1[2] = jj_gen;
@@ -132,7 +105,165 @@ public class GoParser implements GoParserConstants {
     throw new Error("Missing return statement in function");
   }
 
+  static final public SingleImport SingleImport() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   NodeToken n2;
+   Token n3;
+   Identifier n4;
+   NodeToken n5;
+   Token n6;
+    n1 = jj_consume_token(IMPORT);
+                 n0 = JTBToolkit.makeNodeToken(n1);
+    n3 = jj_consume_token(53);
+             n2 = JTBToolkit.makeNodeToken(n3);
+    n4 = Identifier();
+    n6 = jj_consume_token(53);
+             n5 = JTBToolkit.makeNodeToken(n6);
+     {if (true) return new SingleImport(n0,n2,n4,n5);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public MultipleImport MultipleImport() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   NodeToken n2;
+   Token n3;
+   NodeListOptional n4 = new NodeListOptional();
+   NodeSequence n5;
+   NodeToken n6;
+   Token n7;
+   Identifier n8;
+   NodeToken n9;
+   Token n10;
+   NodeToken n11;
+   Token n12;
+    n1 = jj_consume_token(IMPORT);
+                 n0 = JTBToolkit.makeNodeToken(n1);
+    n3 = jj_consume_token(LPAREN);
+            n2 = JTBToolkit.makeNodeToken(n3);
+    label_2:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 53:
+        ;
+        break;
+      default:
+        jj_la1[3] = jj_gen;
+        break label_2;
+      }
+        n5 = new NodeSequence(3);
+      n7 = jj_consume_token(53);
+                n6 = JTBToolkit.makeNodeToken(n7);
+        n5.addNode(n6);
+      n8 = Identifier();
+        n5.addNode(n8);
+      n10 = jj_consume_token(53);
+                 n9 = JTBToolkit.makeNodeToken(n10);
+        n5.addNode(n9);
+        n4.addNode(n5);
+    }
+     n4.nodes.trimToSize();
+    n12 = jj_consume_token(RPAREN);
+             n11 = JTBToolkit.makeNodeToken(n12);
+     {if (true) return new MultipleImport(n0,n2,n4,n11);}
+    throw new Error("Missing return statement in function");
+  }
+
   static final public FunctionDeclaration FunctionDeclaration() throws ParseException {
+   NodeChoice n0;
+   MainFunctionDeclaration n1;
+   OtherFunctionDeclaration n2;
+    if (jj_2_3(2)) {
+      n1 = MainFunctionDeclaration();
+        n0 = new NodeChoice(n1, 0);
+    } else {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case FUNC:
+        n2 = OtherFunctionDeclaration();
+        n0 = new NodeChoice(n2, 1);
+        break;
+      default:
+        jj_la1[4] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    }
+     {if (true) return new FunctionDeclaration(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public MainFunctionDeclaration MainFunctionDeclaration() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   NodeToken n2;
+   Token n3;
+   NodeToken n4;
+   Token n5;
+   NodeToken n6;
+   Token n7;
+   NodeToken n8;
+   Token n9;
+   NodeListOptional n10 = new NodeListOptional();
+   VarDeclaration n11;
+   NodeListOptional n12 = new NodeListOptional();
+   Statement n13;
+   NodeToken n14;
+   Token n15;
+    n1 = jj_consume_token(FUNC);
+               n0 = JTBToolkit.makeNodeToken(n1);
+    n3 = jj_consume_token(MAIN);
+               n2 = JTBToolkit.makeNodeToken(n3);
+    n5 = jj_consume_token(LPAREN);
+            n4 = JTBToolkit.makeNodeToken(n5);
+    n7 = jj_consume_token(RPAREN);
+            n6 = JTBToolkit.makeNodeToken(n7);
+    n9 = jj_consume_token(LBRACE);
+            n8 = JTBToolkit.makeNodeToken(n9);
+    label_3:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case VAR:
+        ;
+        break;
+      default:
+        jj_la1[5] = jj_gen;
+        break label_3;
+      }
+      n11 = VarDeclaration();
+        n10.addNode(n11);
+    }
+     n10.nodes.trimToSize();
+    label_4:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LPAREN:
+      case LBRACE:
+      case IF:
+      case WHILE:
+      case FOR:
+      case PRINT1:
+      case PRINT2:
+      case INTEGER_LITERAL:
+      case IDENTIFIER:
+      case 53:
+        ;
+        break;
+      default:
+        jj_la1[6] = jj_gen;
+        break label_4;
+      }
+      n13 = Statement();
+        n12.addNode(n13);
+    }
+     n12.nodes.trimToSize();
+    n15 = jj_consume_token(RBRACE);
+             n14 = JTBToolkit.makeNodeToken(n15);
+     {if (true) return new MainFunctionDeclaration(n0,n2,n4,n6,n8,n10,n12,n14);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public OtherFunctionDeclaration OtherFunctionDeclaration() throws ParseException {
    NodeToken n0;
    Token n1;
    Identifier n2;
@@ -146,12 +277,9 @@ public class GoParser implements GoParserConstants {
    NodeListOptional n10 = new NodeListOptional();
    Statement n11;
    NodeOptional n12 = new NodeOptional();
-   NodeSequence n13;
+   ReturnExpression n13;
    NodeToken n14;
    Token n15;
-   Expression n16;
-   NodeToken n17;
-   Token n18;
     n1 = jj_consume_token(FUNC);
                n0 = JTBToolkit.makeNodeToken(n1);
     n2 = Identifier();
@@ -162,40 +290,43 @@ public class GoParser implements GoParserConstants {
         n4.addNode(n5);
       break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[7] = jj_gen;
       ;
     }
     n7 = jj_consume_token(LBRACE);
             n6 = JTBToolkit.makeNodeToken(n7);
-    label_3:
+    label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VAR:
         ;
         break;
       default:
-        jj_la1[4] = jj_gen;
-        break label_3;
+        jj_la1[8] = jj_gen;
+        break label_5;
       }
       n9 = VarDeclaration();
         n8.addNode(n9);
     }
      n8.nodes.trimToSize();
-    label_4:
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LPAREN:
       case LBRACE:
       case IF:
       case WHILE:
-      case PRINT:
       case FOR:
+      case PRINT1:
+      case PRINT2:
+      case INTEGER_LITERAL:
       case IDENTIFIER:
-      case 57:
+      case 53:
         ;
         break;
       default:
-        jj_la1[5] = jj_gen;
-        break label_4;
+        jj_la1[9] = jj_gen;
+        break label_6;
       }
       n11 = Statement();
         n10.addNode(n11);
@@ -203,21 +334,27 @@ public class GoParser implements GoParserConstants {
      n10.nodes.trimToSize();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RETURN:
-        n13 = new NodeSequence(2);
-      n15 = jj_consume_token(RETURN);
-                     n14 = JTBToolkit.makeNodeToken(n15);
-        n13.addNode(n14);
-      n16 = Expression();
-        n13.addNode(n16);
+      n13 = ReturnExpression();
         n12.addNode(n13);
       break;
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[10] = jj_gen;
       ;
     }
-    n18 = jj_consume_token(RBRACE);
-             n17 = JTBToolkit.makeNodeToken(n18);
-     {if (true) return new FunctionDeclaration(n0,n2,n3,n4,n6,n8,n10,n12,n17);}
+    n15 = jj_consume_token(RBRACE);
+             n14 = JTBToolkit.makeNodeToken(n15);
+     {if (true) return new OtherFunctionDeclaration(n0,n2,n3,n4,n6,n8,n10,n12,n14);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public ReturnExpression ReturnExpression() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   Expression n2;
+    n1 = jj_consume_token(RETURN);
+                 n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = Expression();
+     {if (true) return new ReturnExpression(n0,n2);}
     throw new Error("Missing return statement in function");
   }
 
@@ -226,77 +363,63 @@ public class GoParser implements GoParserConstants {
    Token n1;
    NodeOptional n2 = new NodeOptional();
    NodeSequence n3;
-   Identifier n4;
-   NodeOptional n5;
-   Type n6;
-   NodeListOptional n7;
-   NodeSequence n8;
-   NodeToken n9;
-   Token n10;
-   Identifier n11;
-   NodeOptional n12;
-   Type n13;
-   NodeToken n14;
-   Token n15;
+   VarType n4;
+   NodeListOptional n5;
+   CommaVarType n6;
+   NodeToken n7;
+   Token n8;
     n1 = jj_consume_token(LPAREN);
             n0 = JTBToolkit.makeNodeToken(n1);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IDENTIFIER:
-        n5 = new NodeOptional();
-        n7 = new NodeListOptional();
-        n3 = new NodeSequence(3);
-      n4 = Identifier();
+        n5 = new NodeListOptional();
+        n3 = new NodeSequence(2);
+      n4 = VarType();
         n3.addNode(n4);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case INTEGER:
-        n6 = Type();
-           n5.addNode(n6);
-        break;
-      default:
-        jj_la1[7] = jj_gen;
-        ;
-      }
-        n3.addNode(n5);
-      label_5:
+      label_7:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 53:
+        case 54:
           ;
           break;
         default:
-          jj_la1[8] = jj_gen;
-          break label_5;
+          jj_la1[11] = jj_gen;
+          break label_7;
         }
-           n12 = new NodeOptional();
-           n8 = new NodeSequence(3);
-        n10 = jj_consume_token(53);
-                   n9 = JTBToolkit.makeNodeToken(n10);
-           n8.addNode(n9);
-        n11 = Identifier();
-           n8.addNode(n11);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case INTEGER:
-          n13 = Type();
-              n12.addNode(n13);
-          break;
-        default:
-          jj_la1[9] = jj_gen;
-          ;
-        }
-           n8.addNode(n12);
-           n7.addNode(n8);
+        n6 = CommaVarType();
+           n5.addNode(n6);
       }
-        n7.nodes.trimToSize();
-        n3.addNode(n7);
+        n5.nodes.trimToSize();
+        n3.addNode(n5);
         n2.addNode(n3);
       break;
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[12] = jj_gen;
       ;
     }
-    n15 = jj_consume_token(RPAREN);
-             n14 = JTBToolkit.makeNodeToken(n15);
-     {if (true) return new Signature(n0,n2,n14);}
+    n8 = jj_consume_token(RPAREN);
+            n7 = JTBToolkit.makeNodeToken(n8);
+     {if (true) return new Signature(n0,n2,n7);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public VarType VarType() throws ParseException {
+   Identifier n0;
+   Type n1;
+    n0 = Identifier();
+    n1 = Type();
+     {if (true) return new VarType(n0,n1);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public CommaVarType CommaVarType() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   VarType n2;
+    n1 = jj_consume_token(54);
+            n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = VarType();
+     {if (true) return new CommaVarType(n0,n2);}
     throw new Error("Missing return statement in function");
   }
 
@@ -320,19 +443,21 @@ public class GoParser implements GoParserConstants {
 
   static final public Statement Statement() throws ParseException {
    NodeChoice n0;
-   Block n1;
-   AssignmentStatement n2;
+   PrintStatement n1;
+   Block n2;
    IfStatement n3;
    WhileStatement n4;
    ForStatement n5;
-   PrintStatement n6;
+   AssignmentStatement n6;
+   Expression n7;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LBRACE:
-      n1 = Block();
+    case PRINT1:
+    case PRINT2:
+      n1 = PrintStatement();
         n0 = new NodeChoice(n1, 0);
       break;
-    case IDENTIFIER:
-      n2 = AssignmentStatement();
+    case LBRACE:
+      n2 = Block();
         n0 = new NodeChoice(n2, 1);
       break;
     case IF:
@@ -347,15 +472,26 @@ public class GoParser implements GoParserConstants {
       n5 = ForStatement();
         n0 = new NodeChoice(n5, 4);
       break;
-    case PRINT:
-    case 57:
-      n6 = PrintStatement();
-        n0 = new NodeChoice(n6, 5);
-      break;
     default:
-      jj_la1[11] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+      jj_la1[13] = jj_gen;
+      if (jj_2_4(3)) {
+        n6 = AssignmentStatement();
+        n0 = new NodeChoice(n6, 5);
+      } else {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case LPAREN:
+        case INTEGER_LITERAL:
+        case IDENTIFIER:
+        case 53:
+          n7 = Expression();
+        n0 = new NodeChoice(n7, 6);
+          break;
+        default:
+          jj_la1[14] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
     }
      {if (true) return new Statement(n0);}
     throw new Error("Missing return statement in function");
@@ -372,35 +508,38 @@ public class GoParser implements GoParserConstants {
    Token n7;
     n1 = jj_consume_token(LBRACE);
             n0 = JTBToolkit.makeNodeToken(n1);
-    label_6:
+    label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VAR:
         ;
         break;
       default:
-        jj_la1[12] = jj_gen;
-        break label_6;
+        jj_la1[15] = jj_gen;
+        break label_8;
       }
       n3 = VarDeclaration();
         n2.addNode(n3);
     }
      n2.nodes.trimToSize();
-    label_7:
+    label_9:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LPAREN:
       case LBRACE:
       case IF:
       case WHILE:
-      case PRINT:
       case FOR:
+      case PRINT1:
+      case PRINT2:
+      case INTEGER_LITERAL:
       case IDENTIFIER:
-      case 57:
+      case 53:
         ;
         break;
       default:
-        jj_la1[13] = jj_gen;
-        break label_7;
+        jj_la1[16] = jj_gen;
+        break label_9;
       }
       n5 = Statement();
         n4.addNode(n5);
@@ -417,48 +556,138 @@ public class GoParser implements GoParserConstants {
    Token n1;
    Identifier n2;
    NodeListOptional n3 = new NodeListOptional();
-   NodeSequence n4;
-   NodeToken n5;
-   Token n6;
-   Identifier n7;
-   Type n8;
+   CommaIdentifier n4;
+   Type n5;
     n1 = jj_consume_token(VAR);
               n0 = JTBToolkit.makeNodeToken(n1);
     n2 = Identifier();
-    label_8:
+    label_10:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 53:
+      case 54:
         ;
         break;
       default:
-        jj_la1[14] = jj_gen;
-        break label_8;
+        jj_la1[17] = jj_gen;
+        break label_10;
       }
-        n4 = new NodeSequence(2);
-      n6 = jj_consume_token(53);
-               n5 = JTBToolkit.makeNodeToken(n6);
-        n4.addNode(n5);
-      n7 = Identifier();
-        n4.addNode(n7);
+      n4 = CommaIdentifier();
         n3.addNode(n4);
     }
      n3.nodes.trimToSize();
-    n8 = Type();
-     {if (true) return new VarDeclaration(n0,n2,n3,n8);}
+    n5 = Type();
+     {if (true) return new VarDeclaration(n0,n2,n3,n5);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public CommaIdentifier CommaIdentifier() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   Identifier n2;
+    n1 = jj_consume_token(54);
+            n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = Identifier();
+     {if (true) return new CommaIdentifier(n0,n2);}
     throw new Error("Missing return statement in function");
   }
 
   static final public AssignmentStatement AssignmentStatement() throws ParseException {
-   Identifier n0;
+   PrimaryExpression n0;
+   AssignmentOperator n1;
+   Expression n2;
+    n0 = PrimaryExpression();
+    n1 = AssignmentOperator();
+    n2 = Expression();
+     {if (true) return new AssignmentStatement(n0,n1,n2);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public AssignmentOperator AssignmentOperator() throws ParseException {
+   NodeChoice n0;
    NodeToken n1;
    Token n2;
-   Expression n3;
-    n0 = Identifier();
-    n2 = jj_consume_token(54);
-            n1 = JTBToolkit.makeNodeToken(n2);
-    n3 = Expression();
-     {if (true) return new AssignmentStatement(n0,n1,n3);}
+   NodeToken n3;
+   Token n4;
+   NodeToken n5;
+   Token n6;
+   NodeToken n7;
+   Token n8;
+   NodeToken n9;
+   Token n10;
+   NodeToken n11;
+   Token n12;
+   NodeToken n13;
+   Token n14;
+   NodeToken n15;
+   Token n16;
+   NodeToken n17;
+   Token n18;
+   NodeToken n19;
+   Token n20;
+   NodeToken n21;
+   Token n22;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ASSIGN:
+      n2 = jj_consume_token(ASSIGN);
+               n1 = JTBToolkit.makeNodeToken(n2);
+        n0 = new NodeChoice(n1, 0);
+      break;
+    case 55:
+      n4 = jj_consume_token(55);
+                n3 = JTBToolkit.makeNodeToken(n4);
+        n0 = new NodeChoice(n3, 1);
+      break;
+    case 56:
+      n6 = jj_consume_token(56);
+                n5 = JTBToolkit.makeNodeToken(n6);
+        n0 = new NodeChoice(n5, 2);
+      break;
+    case 57:
+      n8 = jj_consume_token(57);
+                n7 = JTBToolkit.makeNodeToken(n8);
+        n0 = new NodeChoice(n7, 3);
+      break;
+    case 58:
+      n10 = jj_consume_token(58);
+                 n9 = JTBToolkit.makeNodeToken(n10);
+        n0 = new NodeChoice(n9, 4);
+      break;
+    case 59:
+      n12 = jj_consume_token(59);
+                 n11 = JTBToolkit.makeNodeToken(n12);
+        n0 = new NodeChoice(n11, 5);
+      break;
+    case 60:
+      n14 = jj_consume_token(60);
+                  n13 = JTBToolkit.makeNodeToken(n14);
+        n0 = new NodeChoice(n13, 6);
+      break;
+    case 61:
+      n16 = jj_consume_token(61);
+                  n15 = JTBToolkit.makeNodeToken(n16);
+        n0 = new NodeChoice(n15, 7);
+      break;
+    case 62:
+      n18 = jj_consume_token(62);
+                 n17 = JTBToolkit.makeNodeToken(n18);
+        n0 = new NodeChoice(n17, 8);
+      break;
+    case 63:
+      n20 = jj_consume_token(63);
+                 n19 = JTBToolkit.makeNodeToken(n20);
+        n0 = new NodeChoice(n19, 9);
+      break;
+    case 64:
+      n22 = jj_consume_token(64);
+                 n21 = JTBToolkit.makeNodeToken(n22);
+        n0 = new NodeChoice(n21, 10);
+      break;
+    default:
+      jj_la1[18] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+     {if (true) return new AssignmentOperator(n0);}
     throw new Error("Missing return statement in function");
   }
 
@@ -468,21 +697,13 @@ public class GoParser implements GoParserConstants {
    Expression n2;
    Statement n3;
    NodeOptional n4 = new NodeOptional();
-   NodeSequence n5;
-   NodeToken n6;
-   Token n7;
-   Statement n8;
+   ElseStatement n5;
     n1 = jj_consume_token(IF);
              n0 = JTBToolkit.makeNodeToken(n1);
     n2 = Expression();
     n3 = Statement();
-    if (jj_2_2(2)) {
-        n5 = new NodeSequence(2);
-      n7 = jj_consume_token(ELSE);
-                  n6 = JTBToolkit.makeNodeToken(n7);
-        n5.addNode(n6);
-      n8 = Statement();
-        n5.addNode(n8);
+    if (jj_2_5(2)) {
+      n5 = ElseStatement();
         n4.addNode(n5);
     } else {
       ;
@@ -491,24 +712,27 @@ public class GoParser implements GoParserConstants {
     throw new Error("Missing return statement in function");
   }
 
+  static final public ElseStatement ElseStatement() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   Statement n2;
+    n1 = jj_consume_token(ELSE);
+               n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = Statement();
+     {if (true) return new ElseStatement(n0,n2);}
+    throw new Error("Missing return statement in function");
+  }
+
   static final public WhileStatement WhileStatement() throws ParseException {
    NodeToken n0;
    Token n1;
    Expression n2;
-   NodeToken n3;
-   Token n4;
-   Statement n5;
-   NodeToken n6;
-   Token n7;
+   Statement n3;
     n1 = jj_consume_token(WHILE);
                 n0 = JTBToolkit.makeNodeToken(n1);
     n2 = Expression();
-    n4 = jj_consume_token(LBRACE);
-            n3 = JTBToolkit.makeNodeToken(n4);
-    n5 = Statement();
-    n7 = jj_consume_token(RBRACE);
-            n6 = JTBToolkit.makeNodeToken(n7);
-     {if (true) return new WhileStatement(n0,n2,n3,n5,n6);}
+    n3 = Statement();
+     {if (true) return new WhileStatement(n0,n2,n3);}
     throw new Error("Missing return statement in function");
   }
 
@@ -524,23 +748,20 @@ public class GoParser implements GoParserConstants {
    NodeToken n8;
    Token n9;
    NodeOptional n10 = new NodeOptional();
-   NodeChoice n11;
-   AssignmentStatement n12;
-   IncrementStatement n13;
-   NodeToken n14;
-   Token n15;
-   Statement n16;
-   NodeToken n17;
-   Token n18;
+   Statement n11;
+   Statement n12;
     n1 = jj_consume_token(FOR);
               n0 = JTBToolkit.makeNodeToken(n1);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case LPAREN:
+    case INTEGER_LITERAL:
     case IDENTIFIER:
+    case 53:
       n3 = AssignmentStatement();
         n2.addNode(n3);
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[19] = jj_gen;
       ;
     }
     n5 = jj_consume_token(SEMICOLON);
@@ -549,168 +770,39 @@ public class GoParser implements GoParserConstants {
     case LPAREN:
     case INTEGER_LITERAL:
     case IDENTIFIER:
+    case 53:
       n7 = Expression();
         n6.addNode(n7);
       break;
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[20] = jj_gen;
       ;
     }
     n9 = jj_consume_token(SEMICOLON);
             n8 = JTBToolkit.makeNodeToken(n9);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case IDENTIFIER:
-    case 55:
-    case 56:
-      if (jj_2_3(3)) {
-        n12 = AssignmentStatement();
-           n11 = new NodeChoice(n12, 0);
-      } else {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case IDENTIFIER:
-        case 55:
-        case 56:
-          n13 = IncrementStatement();
-           n11 = new NodeChoice(n13, 1);
-          break;
-        default:
-          jj_la1[17] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-      }
+    if (jj_2_6(2)) {
+      n11 = Statement();
         n10.addNode(n11);
-      break;
-    default:
-      jj_la1[18] = jj_gen;
+    } else {
       ;
     }
-    n15 = jj_consume_token(LBRACE);
-             n14 = JTBToolkit.makeNodeToken(n15);
-    n16 = Statement();
-    n18 = jj_consume_token(RBRACE);
-             n17 = JTBToolkit.makeNodeToken(n18);
-     {if (true) return new ForStatement(n0,n2,n4,n6,n8,n10,n14,n16,n17);}
-    throw new Error("Missing return statement in function");
-  }
-
-  static final public IncrementStatement IncrementStatement() throws ParseException {
-   NodeChoice n0;
-   NodeSequence n1;
-   NodeToken n2;
-   Token n3;
-   Identifier n4;
-   NodeSequence n5;
-   NodeToken n6;
-   Token n7;
-   Identifier n8;
-   NodeSequence n9;
-   Identifier n10;
-   NodeToken n11;
-   Token n12;
-   NodeSequence n13;
-   Identifier n14;
-   NodeToken n15;
-   Token n16;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 55:
-        n1 = new NodeSequence(2);
-      n3 = jj_consume_token(55);
-                n2 = JTBToolkit.makeNodeToken(n3);
-        n1.addNode(n2);
-      n4 = Identifier();
-        n1.addNode(n4);
-        n0 = new NodeChoice(n1, 0);
-      break;
-    case 56:
-        n5 = new NodeSequence(2);
-      n7 = jj_consume_token(56);
-                n6 = JTBToolkit.makeNodeToken(n7);
-        n5.addNode(n6);
-      n8 = Identifier();
-        n5.addNode(n8);
-        n0 = new NodeChoice(n5, 1);
-      break;
-    default:
-      jj_la1[19] = jj_gen;
-      if (jj_2_4(2)) {
-        n9 = new NodeSequence(3);
-        n10 = Identifier();
-        n9.addNode(n10);
-        n12 = jj_consume_token(55);
-                 n11 = JTBToolkit.makeNodeToken(n12);
-        n9.addNode(n11);
-        n0 = new NodeChoice(n9, 2);
-      } else {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case IDENTIFIER:
-        n13 = new NodeSequence(2);
-          n14 = Identifier();
-        n13.addNode(n14);
-          n16 = jj_consume_token(56);
-                 n15 = JTBToolkit.makeNodeToken(n16);
-        n13.addNode(n15);
-        n0 = new NodeChoice(n13, 3);
-          break;
-        default:
-          jj_la1[20] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-      }
-    }
-     {if (true) return new IncrementStatement(n0);}
+    n12 = Statement();
+     {if (true) return new ForStatement(n0,n2,n4,n6,n8,n10,n12);}
     throw new Error("Missing return statement in function");
   }
 
   static final public PrintStatement PrintStatement() throws ParseException {
    NodeChoice n0;
-   NodeSequence n1;
-   NodeToken n2;
-   Token n3;
-   NodeToken n4;
-   Token n5;
-   Expression n6;
-   NodeToken n7;
-   Token n8;
-   NodeSequence n9;
-   NodeToken n10;
-   Token n11;
-   NodeToken n12;
-   Token n13;
-   Expression n14;
-   NodeToken n15;
-   Token n16;
+   PrintlnStatement n1;
+   PrintfStatement n2;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case PRINT:
-        n1 = new NodeSequence(4);
-      n3 = jj_consume_token(PRINT);
-                         n2 = JTBToolkit.makeNodeToken(n3);
-        n1.addNode(n2);
-      n5 = jj_consume_token(LPAREN);
-               n4 = JTBToolkit.makeNodeToken(n5);
-        n1.addNode(n4);
-      n6 = Expression();
-        n1.addNode(n6);
-      n8 = jj_consume_token(RPAREN);
-               n7 = JTBToolkit.makeNodeToken(n8);
-        n1.addNode(n7);
+    case PRINT1:
+      n1 = PrintlnStatement();
         n0 = new NodeChoice(n1, 0);
       break;
-    case 57:
-        n9 = new NodeSequence(4);
-      n11 = jj_consume_token(57);
-                         n10 = JTBToolkit.makeNodeToken(n11);
-        n9.addNode(n10);
-      n13 = jj_consume_token(LPAREN);
-                n12 = JTBToolkit.makeNodeToken(n13);
-        n9.addNode(n12);
-      n14 = Expression();
-        n9.addNode(n14);
-      n16 = jj_consume_token(RPAREN);
-                n15 = JTBToolkit.makeNodeToken(n16);
-        n9.addNode(n15);
-        n0 = new NodeChoice(n9, 1);
+    case PRINT2:
+      n2 = PrintfStatement();
+        n0 = new NodeChoice(n2, 1);
       break;
     default:
       jj_la1[21] = jj_gen;
@@ -721,153 +813,583 @@ public class GoParser implements GoParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Expression Expression() throws ParseException {
-   NodeChoice n0;
-   AndExpression n1;
-   CompareExpression n2;
-   EqualityExpression n3;
-   PlusExpression n4;
-   MinusExpression n5;
-   TimesExpression n6;
-   PrimaryExpression n7;
-    if (jj_2_5(2147483647)) {
-      n1 = AndExpression();
-        n0 = new NodeChoice(n1, 0);
-    } else if (jj_2_6(2147483647)) {
-      n2 = CompareExpression();
-        n0 = new NodeChoice(n2, 1);
-    } else if (jj_2_7(2147483647)) {
-      n3 = EqualityExpression();
-        n0 = new NodeChoice(n3, 2);
-    } else if (jj_2_8(2147483647)) {
-      n4 = PlusExpression();
-        n0 = new NodeChoice(n4, 3);
-    } else if (jj_2_9(2147483647)) {
-      n5 = MinusExpression();
-        n0 = new NodeChoice(n5, 4);
-    } else if (jj_2_10(2147483647)) {
-      n6 = TimesExpression();
-        n0 = new NodeChoice(n6, 5);
-    } else {
+  static final public PrintlnStatement PrintlnStatement() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   StringPrint n2;
+    n1 = jj_consume_token(PRINT1);
+                      n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = StringPrint();
+     {if (true) return new PrintlnStatement(n0,n2);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public PrintfStatement PrintfStatement() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   StringPrint n2;
+    n1 = jj_consume_token(PRINT2);
+                     n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = StringPrint();
+     {if (true) return new PrintfStatement(n0,n2);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public StringPrint StringPrint() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   StringMsg n2;
+   NodeListOptional n3 = new NodeListOptional();
+   CommaExpression n4;
+   NodeToken n5;
+   Token n6;
+    n1 = jj_consume_token(LPAREN);
+            n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = StringMsg();
+    label_11:
+    while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case LPAREN:
-      case INTEGER_LITERAL:
-      case IDENTIFIER:
-        n7 = PrimaryExpression();
-        n0 = new NodeChoice(n7, 6);
+      case 54:
+        ;
         break;
       default:
         jj_la1[22] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+        break label_11;
       }
+      n4 = CommaExpression();
+        n3.addNode(n4);
     }
-     {if (true) return new Expression(n0);}
+     n3.nodes.trimToSize();
+    n6 = jj_consume_token(RPAREN);
+            n5 = JTBToolkit.makeNodeToken(n6);
+     {if (true) return new StringPrint(n0,n2,n3,n5);}
     throw new Error("Missing return statement in function");
   }
 
-  static final public AndExpression AndExpression() throws ParseException {
+  static final public Expression Expression() throws ParseException {
    PrimaryExpression n0;
-   NodeToken n1;
-   Token n2;
-   PrimaryExpression n3;
+   NodeOptional n1 = new NodeOptional();
+   NodeSequence n2;
+   Operator n3;
+   Expression n4;
     n0 = PrimaryExpression();
-    n2 = jj_consume_token(AND);
-            n1 = JTBToolkit.makeNodeToken(n2);
-    n3 = PrimaryExpression();
-     {if (true) return new AndExpression(n0,n1,n3);}
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case LT:
+    case GT:
+    case PLUS:
+    case MINUS:
+    case STAR:
+    case DIVIDE:
+    case MODULO:
+    case AND:
+    case OR:
+    case 62:
+    case 63:
+    case 64:
+    case 65:
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+    case 70:
+    case 71:
+    case 72:
+    case 73:
+        n2 = new NodeSequence(2);
+      n3 = Operator();
+        n2.addNode(n3);
+      n4 = Expression();
+        n2.addNode(n4);
+        n1.addNode(n2);
+      break;
+    default:
+      jj_la1[23] = jj_gen;
+      ;
+    }
+     {if (true) return new Expression(n0,n1);}
     throw new Error("Missing return statement in function");
   }
 
-  static final public CompareExpression CompareExpression() throws ParseException {
-   PrimaryExpression n0;
+  static final public Operator Operator() throws ParseException {
+   NodeChoice n0;
    NodeToken n1;
    Token n2;
-   PrimaryExpression n3;
-    n0 = PrimaryExpression();
-    n2 = jj_consume_token(LT);
-            n1 = JTBToolkit.makeNodeToken(n2);
-    n3 = PrimaryExpression();
-     {if (true) return new CompareExpression(n0,n1,n3);}
-    throw new Error("Missing return statement in function");
-  }
-
-  static final public EqualityExpression EqualityExpression() throws ParseException {
-   PrimaryExpression n0;
-   NodeToken n1;
-   Token n2;
-   PrimaryExpression n3;
-    n0 = PrimaryExpression();
-    n2 = jj_consume_token(58);
-             n1 = JTBToolkit.makeNodeToken(n2);
-    n3 = PrimaryExpression();
-     {if (true) return new EqualityExpression(n0,n1,n3);}
-    throw new Error("Missing return statement in function");
-  }
-
-  static final public PlusExpression PlusExpression() throws ParseException {
-   PrimaryExpression n0;
-   NodeToken n1;
-   Token n2;
-   PrimaryExpression n3;
-    n0 = PrimaryExpression();
-    n2 = jj_consume_token(PLUS);
-            n1 = JTBToolkit.makeNodeToken(n2);
-    n3 = PrimaryExpression();
-     {if (true) return new PlusExpression(n0,n1,n3);}
-    throw new Error("Missing return statement in function");
-  }
-
-  static final public MinusExpression MinusExpression() throws ParseException {
-   PrimaryExpression n0;
-   NodeToken n1;
-   Token n2;
-   PrimaryExpression n3;
-    n0 = PrimaryExpression();
-    n2 = jj_consume_token(MINUS);
-            n1 = JTBToolkit.makeNodeToken(n2);
-    n3 = PrimaryExpression();
-     {if (true) return new MinusExpression(n0,n1,n3);}
-    throw new Error("Missing return statement in function");
-  }
-
-  static final public TimesExpression TimesExpression() throws ParseException {
-   PrimaryExpression n0;
-   NodeToken n1;
-   Token n2;
-   PrimaryExpression n3;
-    n0 = PrimaryExpression();
-    n2 = jj_consume_token(STAR);
-            n1 = JTBToolkit.makeNodeToken(n2);
-    n3 = PrimaryExpression();
-     {if (true) return new TimesExpression(n0,n1,n3);}
+   NodeToken n3;
+   Token n4;
+   NodeToken n5;
+   Token n6;
+   NodeToken n7;
+   Token n8;
+   NodeToken n9;
+   Token n10;
+   NodeToken n11;
+   Token n12;
+   NodeToken n13;
+   Token n14;
+   NodeToken n15;
+   Token n16;
+   NodeToken n17;
+   Token n18;
+   NodeToken n19;
+   Token n20;
+   NodeToken n21;
+   Token n22;
+   NodeToken n23;
+   Token n24;
+   NodeToken n25;
+   Token n26;
+   NodeToken n27;
+   Token n28;
+   NodeToken n29;
+   Token n30;
+   NodeToken n31;
+   Token n32;
+   NodeToken n33;
+   Token n34;
+   NodeToken n35;
+   Token n36;
+   NodeToken n37;
+   Token n38;
+   NodeToken n39;
+   Token n40;
+   NodeToken n41;
+   Token n42;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PLUS:
+      n2 = jj_consume_token(PLUS);
+               n1 = JTBToolkit.makeNodeToken(n2);
+        n0 = new NodeChoice(n1, 0);
+      break;
+    case MINUS:
+      n4 = jj_consume_token(MINUS);
+               n3 = JTBToolkit.makeNodeToken(n4);
+        n0 = new NodeChoice(n3, 1);
+      break;
+    case STAR:
+      n6 = jj_consume_token(STAR);
+               n5 = JTBToolkit.makeNodeToken(n6);
+        n0 = new NodeChoice(n5, 2);
+      break;
+    case DIVIDE:
+      n8 = jj_consume_token(DIVIDE);
+               n7 = JTBToolkit.makeNodeToken(n8);
+        n0 = new NodeChoice(n7, 3);
+      break;
+    case MODULO:
+      n10 = jj_consume_token(MODULO);
+                n9 = JTBToolkit.makeNodeToken(n10);
+        n0 = new NodeChoice(n9, 4);
+      break;
+    case LT:
+      n12 = jj_consume_token(LT);
+                n11 = JTBToolkit.makeNodeToken(n12);
+        n0 = new NodeChoice(n11, 5);
+      break;
+    case GT:
+      n14 = jj_consume_token(GT);
+                n13 = JTBToolkit.makeNodeToken(n14);
+        n0 = new NodeChoice(n13, 6);
+      break;
+    case 65:
+      n16 = jj_consume_token(65);
+                 n15 = JTBToolkit.makeNodeToken(n16);
+        n0 = new NodeChoice(n15, 7);
+      break;
+    case 66:
+      n18 = jj_consume_token(66);
+                 n17 = JTBToolkit.makeNodeToken(n18);
+        n0 = new NodeChoice(n17, 8);
+      break;
+    case 67:
+      n20 = jj_consume_token(67);
+                 n19 = JTBToolkit.makeNodeToken(n20);
+        n0 = new NodeChoice(n19, 9);
+      break;
+    case 68:
+      n22 = jj_consume_token(68);
+                 n21 = JTBToolkit.makeNodeToken(n22);
+        n0 = new NodeChoice(n21, 10);
+      break;
+    case 69:
+      n24 = jj_consume_token(69);
+                 n23 = JTBToolkit.makeNodeToken(n24);
+        n0 = new NodeChoice(n23, 11);
+      break;
+    case 70:
+      n26 = jj_consume_token(70);
+                 n25 = JTBToolkit.makeNodeToken(n26);
+        n0 = new NodeChoice(n25, 12);
+      break;
+    case AND:
+      n28 = jj_consume_token(AND);
+                n27 = JTBToolkit.makeNodeToken(n28);
+        n0 = new NodeChoice(n27, 13);
+      break;
+    case 71:
+      n30 = jj_consume_token(71);
+                 n29 = JTBToolkit.makeNodeToken(n30);
+        n0 = new NodeChoice(n29, 14);
+      break;
+    case OR:
+      n32 = jj_consume_token(OR);
+                n31 = JTBToolkit.makeNodeToken(n32);
+        n0 = new NodeChoice(n31, 15);
+      break;
+    case 72:
+      n34 = jj_consume_token(72);
+                 n33 = JTBToolkit.makeNodeToken(n34);
+        n0 = new NodeChoice(n33, 16);
+      break;
+    case 73:
+      n36 = jj_consume_token(73);
+                n35 = JTBToolkit.makeNodeToken(n36);
+        n0 = new NodeChoice(n35, 17);
+      break;
+    case 63:
+      n38 = jj_consume_token(63);
+                 n37 = JTBToolkit.makeNodeToken(n38);
+        n0 = new NodeChoice(n37, 18);
+      break;
+    case 62:
+      n40 = jj_consume_token(62);
+                 n39 = JTBToolkit.makeNodeToken(n40);
+        n0 = new NodeChoice(n39, 19);
+      break;
+    case 64:
+      n42 = jj_consume_token(64);
+                 n41 = JTBToolkit.makeNodeToken(n42);
+        n0 = new NodeChoice(n41, 20);
+      break;
+    default:
+      jj_la1[24] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+     {if (true) return new Operator(n0);}
     throw new Error("Missing return statement in function");
   }
 
   static final public PrimaryExpression PrimaryExpression() throws ParseException {
    NodeChoice n0;
    IntegerLiteral n1;
-   Identifier n2;
-   BracketExpression n3;
+   NodeSequence n2;
+   Identifier n3;
+   PostfixExpression n4;
+   NodeSequence n5;
+   BracketExpression n6;
+   NodeToken n7;
+   Token n8;
+   StringMsg n9;
+   Identifier n10;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_LITERAL:
       n1 = IntegerLiteral();
         n0 = new NodeChoice(n1, 0);
       break;
-    case IDENTIFIER:
-      n2 = Identifier();
+    default:
+      jj_la1[25] = jj_gen;
+      if (jj_2_7(2)) {
+        n2 = new NodeSequence(3);
+        n3 = Identifier();
+        n2.addNode(n3);
+        n4 = PostfixExpression();
+        n2.addNode(n4);
         n0 = new NodeChoice(n2, 1);
+      } else {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case LPAREN:
+        n5 = new NodeSequence(2);
+          n6 = BracketExpression();
+        n5.addNode(n6);
+          n8 = jj_consume_token(RPAREN);
+               n7 = JTBToolkit.makeNodeToken(n8);
+        n5.addNode(n7);
+        n0 = new NodeChoice(n5, 2);
+          break;
+        case 53:
+          n9 = StringMsg();
+        n0 = new NodeChoice(n9, 3);
+          break;
+        case IDENTIFIER:
+          n10 = Identifier();
+        n0 = new NodeChoice(n10, 4);
+          break;
+        default:
+          jj_la1[26] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+    }
+     {if (true) return new PrimaryExpression(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public PostfixExpression PostfixExpression() throws ParseException {
+   NodeChoice n0;
+   ArrayAccessExpression n1;
+   FunctionArgumentExpression n2;
+   Increment n3;
+   Decrement n4;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case LSQPAREN:
+      n1 = ArrayAccessExpression();
+        n0 = new NodeChoice(n1, 0);
       break;
     case LPAREN:
-      n3 = BracketExpression();
+      n2 = FunctionArgumentExpression();
+        n0 = new NodeChoice(n2, 1);
+      break;
+    case 74:
+      n3 = Increment();
         n0 = new NodeChoice(n3, 2);
       break;
+    case 75:
+      n4 = Decrement();
+        n0 = new NodeChoice(n4, 3);
+      break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
-     {if (true) return new PrimaryExpression(n0);}
+     {if (true) return new PostfixExpression(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public Increment Increment() throws ParseException {
+   NodeToken n0;
+   Token n1;
+    n1 = jj_consume_token(74);
+             n0 = JTBToolkit.makeNodeToken(n1);
+     {if (true) return new Increment(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public Decrement Decrement() throws ParseException {
+   NodeToken n0;
+   Token n1;
+    n1 = jj_consume_token(75);
+             n0 = JTBToolkit.makeNodeToken(n1);
+     {if (true) return new Decrement(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public ArrayAccessExpression ArrayAccessExpression() throws ParseException {
+   NodeList n0 = new NodeList();
+   SingleArrayAccessExpression n1;
+    label_12:
+    while (true) {
+      n1 = SingleArrayAccessExpression();
+        n0.addNode(n1);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LSQPAREN:
+        ;
+        break;
+      default:
+        jj_la1[28] = jj_gen;
+        break label_12;
+      }
+    }
+     n0.nodes.trimToSize();
+     {if (true) return new ArrayAccessExpression(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public SingleArrayAccessExpression SingleArrayAccessExpression() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   Expression n2;
+   NodeToken n3;
+   Token n4;
+    n1 = jj_consume_token(LSQPAREN);
+            n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = Expression();
+    n4 = jj_consume_token(RSQPAREN);
+            n3 = JTBToolkit.makeNodeToken(n4);
+     {if (true) return new SingleArrayAccessExpression(n0,n2,n3);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public FunctionArgumentExpression FunctionArgumentExpression() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   NodeOptional n2 = new NodeOptional();
+   ArgumentExpressionList n3;
+   NodeToken n4;
+   Token n5;
+    n1 = jj_consume_token(LPAREN);
+            n0 = JTBToolkit.makeNodeToken(n1);
+    if (jj_2_8(2147483647)) {
+      n3 = ArgumentExpressionList();
+        n2.addNode(n3);
+    } else {
+      ;
+    }
+    n5 = jj_consume_token(RPAREN);
+            n4 = JTBToolkit.makeNodeToken(n5);
+     {if (true) return new FunctionArgumentExpression(n0,n2,n4);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public ArgumentExpressionList ArgumentExpressionList() throws ParseException {
+   Expression n0;
+   NodeListOptional n1 = new NodeListOptional();
+   CommaExpression n2;
+    n0 = Expression();
+    label_13:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 54:
+        ;
+        break;
+      default:
+        jj_la1[29] = jj_gen;
+        break label_13;
+      }
+      n2 = CommaExpression();
+        n1.addNode(n2);
+    }
+     n1.nodes.trimToSize();
+     {if (true) return new ArgumentExpressionList(n0,n1);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public CommaExpression CommaExpression() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   Expression n2;
+    n1 = jj_consume_token(54);
+            n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = Expression();
+     {if (true) return new CommaExpression(n0,n2);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public BracketExpression BracketExpression() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   Expression n2;
+    n1 = jj_consume_token(LPAREN);
+            n0 = JTBToolkit.makeNodeToken(n1);
+    n2 = Expression();
+     {if (true) return new BracketExpression(n0,n2);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public StringMsg StringMsg() throws ParseException {
+   NodeToken n0;
+   Token n1;
+   NodeListOptional n2 = new NodeListOptional();
+   SubStrinMsg n3;
+   NodeToken n4;
+   Token n5;
+    n1 = jj_consume_token(53);
+             n0 = JTBToolkit.makeNodeToken(n1);
+    label_14:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case DOT:
+      case LT:
+      case GT:
+      case PLUS:
+      case MINUS:
+      case STAR:
+      case DIVIDE:
+      case MODULO:
+      case AND:
+      case OR:
+      case IDENTIFIER:
+      case 54:
+      case 62:
+      case 63:
+      case 64:
+      case 65:
+      case 66:
+      case 67:
+      case 68:
+      case 69:
+      case 70:
+      case 71:
+      case 72:
+      case 73:
+      case 76:
+        ;
+        break;
+      default:
+        jj_la1[30] = jj_gen;
+        break label_14;
+      }
+      n3 = SubStrinMsg();
+        n2.addNode(n3);
+    }
+     n2.nodes.trimToSize();
+    n5 = jj_consume_token(53);
+             n4 = JTBToolkit.makeNodeToken(n5);
+     {if (true) return new StringMsg(n0,n2,n4);}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public SubStrinMsg SubStrinMsg() throws ParseException {
+   NodeChoice n0;
+   Identifier n1;
+   NodeToken n2;
+   Token n3;
+   Operator n4;
+   NodeToken n5;
+   Token n6;
+   NodeToken n7;
+   Token n8;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case IDENTIFIER:
+      n1 = Identifier();
+        n0 = new NodeChoice(n1, 0);
+      break;
+    case DOT:
+      n3 = jj_consume_token(DOT);
+               n2 = JTBToolkit.makeNodeToken(n3);
+        n0 = new NodeChoice(n2, 1);
+      break;
+    case LT:
+    case GT:
+    case PLUS:
+    case MINUS:
+    case STAR:
+    case DIVIDE:
+    case MODULO:
+    case AND:
+    case OR:
+    case 62:
+    case 63:
+    case 64:
+    case 65:
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+    case 70:
+    case 71:
+    case 72:
+    case 73:
+      n4 = Operator();
+        n0 = new NodeChoice(n4, 2);
+      break;
+    case 54:
+      n6 = jj_consume_token(54);
+               n5 = JTBToolkit.makeNodeToken(n6);
+        n0 = new NodeChoice(n5, 3);
+      break;
+    case 76:
+      n8 = jj_consume_token(76);
+                n7 = JTBToolkit.makeNodeToken(n8);
+        n0 = new NodeChoice(n7, 4);
+      break;
+    default:
+      jj_la1[31] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+     {if (true) return new SubStrinMsg(n0);}
     throw new Error("Missing return statement in function");
   }
 
@@ -877,21 +1399,6 @@ public class GoParser implements GoParserConstants {
     n1 = jj_consume_token(INTEGER_LITERAL);
                           n0 = JTBToolkit.makeNodeToken(n1);
      {if (true) return new IntegerLiteral(n0);}
-    throw new Error("Missing return statement in function");
-  }
-
-  static final public BracketExpression BracketExpression() throws ParseException {
-   NodeToken n0;
-   Token n1;
-   Expression n2;
-   NodeToken n3;
-   Token n4;
-    n1 = jj_consume_token(LPAREN);
-            n0 = JTBToolkit.makeNodeToken(n1);
-    n2 = Expression();
-    n4 = jj_consume_token(RPAREN);
-            n3 = JTBToolkit.makeNodeToken(n4);
-     {if (true) return new BracketExpression(n0,n2,n3);}
     throw new Error("Missing return statement in function");
   }
 
@@ -951,251 +1458,307 @@ public class GoParser implements GoParserConstants {
     finally { jj_save(7, xla); }
   }
 
-  static private boolean jj_2_9(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_9(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(8, xla); }
-  }
-
-  static private boolean jj_2_10(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_10(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(9, xla); }
-  }
-
-  static private boolean jj_3R_17() {
-    if (jj_3R_26()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_16() {
-    if (jj_3R_25()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_15() {
-    if (jj_3R_24()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_40() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(LT)) return true;
-    if (jj_3R_12()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_3() {
-    if (jj_3R_10()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_22() {
-    if (jj_3R_36()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_37() {
-    if (jj_scan_token(PRINT)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_14() {
-    if (jj_3R_10()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_21() {
-    if (jj_3R_11()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1() {
-    if (jj_scan_token(IMPORT)) return true;
-    if (jj_scan_token(52)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_13() {
-    if (jj_3R_23()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_27() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_37()) {
-    jj_scanpos = xsp;
-    if (jj_3R_38()) return true;
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_20() {
-    if (jj_3R_35()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_9() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_13()) {
-    jj_scanpos = xsp;
-    if (jj_3R_14()) {
-    jj_scanpos = xsp;
-    if (jj_3R_15()) {
-    jj_scanpos = xsp;
-    if (jj_3R_16()) {
-    jj_scanpos = xsp;
-    if (jj_3R_17()) {
-    jj_scanpos = xsp;
-    if (jj_3R_18()) return true;
-    }
-    }
-    }
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_10() {
-    if (jj_3R_11()) return true;
-    if (jj_scan_token(54)) return true;
-    if (jj_3R_19()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_12() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_20()) {
-    jj_scanpos = xsp;
-    if (jj_3R_21()) {
-    jj_scanpos = xsp;
-    if (jj_3R_22()) return true;
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_39() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(AND)) return true;
-    if (jj_3R_12()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_26() {
-    if (jj_scan_token(FOR)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_10() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(STAR)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_44() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(STAR)) return true;
-    if (jj_3R_12()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_11() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_9() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(MINUS)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_34() {
-    if (jj_3R_12()) return true;
+  static private boolean jj_3R_91() {
+    if (jj_scan_token(70)) return true;
     return false;
   }
 
   static private boolean jj_3_8() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(PLUS)) return true;
+    if (jj_3R_23()) return true;
     return false;
   }
 
-  static private boolean jj_3R_33() {
-    if (jj_3R_44()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_7() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(58)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_32() {
-    if (jj_3R_43()) return true;
+  static private boolean jj_3R_90() {
+    if (jj_scan_token(69)) return true;
     return false;
   }
 
   static private boolean jj_3_6() {
-    if (jj_3R_12()) return true;
+    if (jj_3R_20()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_89() {
+    if (jj_scan_token(68)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_88() {
+    if (jj_scan_token(67)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_102() {
+    if (jj_3R_23()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_87() {
+    if (jj_scan_token(66)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_77() {
+    if (jj_scan_token(VAR)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_71() {
+    if (jj_3R_18()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_86() {
+    if (jj_scan_token(65)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_59() {
+    if (jj_scan_token(LPAREN)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_102()) jj_scanpos = xsp;
+    if (jj_scan_token(RPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_85() {
+    if (jj_scan_token(GT)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_57() {
+    if (jj_scan_token(FOR)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_71()) jj_scanpos = xsp;
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_84() {
     if (jj_scan_token(LT)) return true;
     return false;
   }
 
-  static private boolean jj_3R_31() {
-    if (jj_3R_42()) return true;
+  static private boolean jj_3R_83() {
+    if (jj_scan_token(MODULO)) return true;
     return false;
   }
 
-  static private boolean jj_3R_43() {
-    if (jj_3R_12()) return true;
+  static private boolean jj_3R_82() {
+    if (jj_scan_token(DIVIDE)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_81() {
+    if (jj_scan_token(STAR)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_15() {
+    if (jj_scan_token(PACKAGE)) return true;
+    if (jj_3R_21()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_70() {
+    if (jj_3R_20()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_80() {
     if (jj_scan_token(MINUS)) return true;
-    if (jj_3R_12()) return true;
     return false;
   }
 
-  static private boolean jj_3_4() {
-    if (jj_3R_11()) return true;
-    if (jj_scan_token(55)) return true;
+  static private boolean jj_3R_78() {
+    if (jj_scan_token(LSQPAREN)) return true;
+    if (jj_3R_26()) return true;
+    if (jj_scan_token(RSQPAREN)) return true;
     return false;
   }
 
-  static private boolean jj_3_5() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(AND)) return true;
+  static private boolean jj_3R_69() {
+    if (jj_3R_77()) return true;
     return false;
   }
 
-  static private boolean jj_3R_30() {
-    if (jj_3R_41()) return true;
+  static private boolean jj_3R_79() {
+    if (jj_scan_token(PLUS)) return true;
     return false;
   }
 
-  static private boolean jj_3R_29() {
-    if (jj_3R_40()) return true;
+  static private boolean jj_3R_54() {
+    if (jj_scan_token(LBRACE)) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_69()) { jj_scanpos = xsp; break; }
+    }
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_70()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_scan_token(RBRACE)) return true;
     return false;
   }
 
-  static private boolean jj_3R_25() {
+  static private boolean jj_3R_73() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_79()) {
+    jj_scanpos = xsp;
+    if (jj_3R_80()) {
+    jj_scanpos = xsp;
+    if (jj_3R_81()) {
+    jj_scanpos = xsp;
+    if (jj_3R_82()) {
+    jj_scanpos = xsp;
+    if (jj_3R_83()) {
+    jj_scanpos = xsp;
+    if (jj_3R_84()) {
+    jj_scanpos = xsp;
+    if (jj_3R_85()) {
+    jj_scanpos = xsp;
+    if (jj_3R_86()) {
+    jj_scanpos = xsp;
+    if (jj_3R_87()) {
+    jj_scanpos = xsp;
+    if (jj_3R_88()) {
+    jj_scanpos = xsp;
+    if (jj_3R_89()) {
+    jj_scanpos = xsp;
+    if (jj_3R_90()) {
+    jj_scanpos = xsp;
+    if (jj_3R_91()) {
+    jj_scanpos = xsp;
+    if (jj_3R_92()) {
+    jj_scanpos = xsp;
+    if (jj_3R_93()) {
+    jj_scanpos = xsp;
+    if (jj_3R_94()) {
+    jj_scanpos = xsp;
+    if (jj_3R_95()) {
+    jj_scanpos = xsp;
+    if (jj_3R_96()) {
+    jj_scanpos = xsp;
+    if (jj_3R_97()) {
+    jj_scanpos = xsp;
+    if (jj_3R_98()) {
+    jj_scanpos = xsp;
+    if (jj_3R_99()) return true;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_56() {
     if (jj_scan_token(WHILE)) return true;
+    if (jj_3R_26()) return true;
     return false;
   }
 
-  static private boolean jj_3R_28() {
-    if (jj_3R_39()) return true;
+  static private boolean jj_3_1() {
+    if (jj_3R_15()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_72() {
+    if (jj_3R_78()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_58() {
+    Token xsp;
+    if (jj_3R_72()) return true;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_72()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_32() {
+    if (jj_3R_26()) return true;
     return false;
   }
 
   static private boolean jj_3R_19() {
+    if (jj_scan_token(ELSE)) return true;
+    if (jj_3R_20()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4() {
+    if (jj_3R_18()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_31() {
+    if (jj_3R_57()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_30() {
+    if (jj_3R_56()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_61() {
+    if (jj_scan_token(75)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_29() {
+    if (jj_3R_55()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_28() {
+    if (jj_3R_54()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5() {
+    if (jj_3R_19()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_17() {
+    if (jj_scan_token(FUNC)) return true;
+    if (jj_scan_token(MAIN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_27() {
+    if (jj_3R_53()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_20() {
     Token xsp;
     xsp = jj_scanpos;
+    if (jj_3R_27()) {
+    jj_scanpos = xsp;
     if (jj_3R_28()) {
     jj_scanpos = xsp;
     if (jj_3R_29()) {
@@ -1204,11 +1767,9 @@ public class GoParser implements GoParserConstants {
     jj_scanpos = xsp;
     if (jj_3R_31()) {
     jj_scanpos = xsp;
-    if (jj_3R_32()) {
+    if (jj_3_4()) {
     jj_scanpos = xsp;
-    if (jj_3R_33()) {
-    jj_scanpos = xsp;
-    if (jj_3R_34()) return true;
+    if (jj_3R_32()) return true;
     }
     }
     }
@@ -1218,55 +1779,399 @@ public class GoParser implements GoParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_42() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(PLUS)) return true;
-    if (jj_3R_12()) return true;
+  static private boolean jj_3R_55() {
+    if (jj_scan_token(IF)) return true;
+    if (jj_3R_26()) return true;
     return false;
   }
 
-  static private boolean jj_3R_36() {
-    if (jj_scan_token(LPAREN)) return true;
-    if (jj_3R_19()) return true;
-    if (jj_scan_token(RPAREN)) return true;
+  static private boolean jj_3R_60() {
+    if (jj_scan_token(74)) return true;
     return false;
   }
 
-  static private boolean jj_3R_23() {
-    if (jj_scan_token(LBRACE)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2() {
-    if (jj_scan_token(ELSE)) return true;
-    if (jj_3R_9()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_41() {
-    if (jj_3R_12()) return true;
-    if (jj_scan_token(58)) return true;
-    if (jj_3R_12()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_35() {
+  static private boolean jj_3R_64() {
     if (jj_scan_token(INTEGER_LITERAL)) return true;
     return false;
   }
 
-  static private boolean jj_3R_24() {
-    if (jj_scan_token(IF)) return true;
+  static private boolean jj_3R_107() {
+    if (jj_scan_token(76)) return true;
     return false;
   }
 
-  static private boolean jj_3R_38() {
+  static private boolean jj_3R_36() {
+    if (jj_3R_61()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_106() {
+    if (jj_scan_token(54)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_35() {
+    if (jj_3R_60()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_62() {
+    if (jj_3R_73()) return true;
+    if (jj_3R_26()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_52() {
+    if (jj_scan_token(64)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_105() {
+    if (jj_3R_73()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_34() {
+    if (jj_3R_59()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_21() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_51() {
+    if (jj_scan_token(63)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_104() {
+    if (jj_scan_token(DOT)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_26() {
+    if (jj_3R_24()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_62()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_33() {
+    if (jj_3R_58()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_50() {
+    if (jj_scan_token(62)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_103() {
+    if (jj_3R_21()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_49() {
+    if (jj_scan_token(61)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_22() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_33()) {
+    jj_scanpos = xsp;
+    if (jj_3R_34()) {
+    jj_scanpos = xsp;
+    if (jj_3R_35()) {
+    jj_scanpos = xsp;
+    if (jj_3R_36()) return true;
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_100() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_103()) {
+    jj_scanpos = xsp;
+    if (jj_3R_104()) {
+    jj_scanpos = xsp;
+    if (jj_3R_105()) {
+    jj_scanpos = xsp;
+    if (jj_3R_106()) {
+    jj_scanpos = xsp;
+    if (jj_3R_107()) return true;
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_48() {
+    if (jj_scan_token(60)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_47() {
+    if (jj_scan_token(59)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_46() {
+    if (jj_scan_token(58)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_45() {
     if (jj_scan_token(57)) return true;
     return false;
   }
 
+  static private boolean jj_3R_44() {
+    if (jj_scan_token(56)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_41() {
+    if (jj_3R_21()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_43() {
+    if (jj_scan_token(55)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_40() {
+    if (jj_3R_66()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_101() {
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_42() {
+    if (jj_scan_token(ASSIGN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_74() {
+    if (jj_3R_100()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_25() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_42()) {
+    jj_scanpos = xsp;
+    if (jj_3R_43()) {
+    jj_scanpos = xsp;
+    if (jj_3R_44()) {
+    jj_scanpos = xsp;
+    if (jj_3R_45()) {
+    jj_scanpos = xsp;
+    if (jj_3R_46()) {
+    jj_scanpos = xsp;
+    if (jj_3R_47()) {
+    jj_scanpos = xsp;
+    if (jj_3R_48()) {
+    jj_scanpos = xsp;
+    if (jj_3R_49()) {
+    jj_scanpos = xsp;
+    if (jj_3R_50()) {
+    jj_scanpos = xsp;
+    if (jj_3R_51()) {
+    jj_scanpos = xsp;
+    if (jj_3R_52()) return true;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_39() {
+    if (jj_3R_65()) return true;
+    if (jj_scan_token(RPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_66() {
+    if (jj_scan_token(53)) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_74()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_scan_token(53)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_7() {
+    if (jj_3R_21()) return true;
+    if (jj_3R_22()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_38() {
+    if (jj_3R_64()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_76() {
+    if (jj_scan_token(PRINT2)) return true;
+    if (jj_3R_101()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_24() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_38()) {
+    jj_scanpos = xsp;
+    if (jj_3_7()) {
+    jj_scanpos = xsp;
+    if (jj_3R_39()) {
+    jj_scanpos = xsp;
+    if (jj_3R_40()) {
+    jj_scanpos = xsp;
+    if (jj_3R_41()) return true;
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_65() {
+    if (jj_scan_token(LPAREN)) return true;
+    if (jj_3R_26()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_75() {
+    if (jj_scan_token(PRINT1)) return true;
+    if (jj_3R_101()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_16() {
+    if (jj_scan_token(IMPORT)) return true;
+    if (jj_scan_token(53)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_99() {
+    if (jj_scan_token(64)) return true;
+    return false;
+  }
+
   static private boolean jj_3R_18() {
-    if (jj_3R_27()) return true;
+    if (jj_3R_24()) return true;
+    if (jj_3R_25()) return true;
+    if (jj_3R_26()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_63() {
+    if (jj_scan_token(54)) return true;
+    if (jj_3R_26()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_98() {
+    if (jj_scan_token(62)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_68() {
+    if (jj_3R_76()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_97() {
+    if (jj_scan_token(63)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_67() {
+    if (jj_3R_75()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_96() {
+    if (jj_scan_token(73)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_95() {
+    if (jj_scan_token(72)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_53() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_67()) {
+    jj_scanpos = xsp;
+    if (jj_3R_68()) return true;
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_94() {
+    if (jj_scan_token(OR)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_37() {
+    if (jj_3R_63()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_93() {
+    if (jj_scan_token(71)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_2() {
+    if (jj_3R_16()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_23() {
+    if (jj_3R_26()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_37()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_92() {
+    if (jj_scan_token(AND)) return true;
     return false;
   }
 
@@ -1282,20 +2187,25 @@ public class GoParser implements GoParserConstants {
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[24];
+  static final private int[] jj_la1 = new int[32];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
+  static private int[] jj_la1_2;
   static {
       jj_la1_init_0();
       jj_la1_init_1();
+      jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x2000,0x0,0x0,0x0,0x0,0x0,0x2000,0x0,0x2000,0x0,0x0,0x200,0x0,0x0,0x0,0x0,0x0,0x200,0x200,};
+      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x2200,0x0,0x0,0x2200,0x0,0x0,0x0,0x2000,0x200,0x0,0x2200,0x0,0x40000,0x200,0x200,0x0,0x0,0xff80000,0xff80000,0x0,0x200,0xa00,0x800,0x0,0xffa0000,0xffa0000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x2000,0x100000,0x1000,0x8,0x4000,0x2028206,0x40,0x8,0x200000,0x8,0x20000,0x2028206,0x4000,0x2028206,0x200000,0x20000,0x30000,0x1820000,0x1820000,0x1800000,0x20000,0x2000200,0x30000,0x30000,};
+      jj_la1_1 = new int[] {0x4000,0x1000,0x2000,0x200000,0x4000,0x8000,0x260607,0x8,0x8000,0x260607,0x40,0x400000,0x40000,0x607,0x260000,0x8000,0x260607,0x400000,0xff800000,0x260000,0x260000,0x600,0x400000,0xc0000000,0xc0000000,0x20000,0x240000,0x0,0x0,0x400000,0xc0440000,0xc0440000,};
    }
-  static final private JJCalls[] jj_2_rtns = new JJCalls[10];
+   private static void jj_la1_init_2() {
+      jj_la1_2 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x0,0x3ff,0x3ff,0x0,0x0,0xc00,0x0,0x0,0x13ff,0x13ff,};
+   }
+  static final private JJCalls[] jj_2_rtns = new JJCalls[8];
   static private boolean jj_rescan = false;
   static private int jj_gc = 0;
 
@@ -1317,7 +2227,7 @@ public class GoParser implements GoParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1332,7 +2242,7 @@ public class GoParser implements GoParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1350,7 +2260,7 @@ public class GoParser implements GoParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1361,7 +2271,7 @@ public class GoParser implements GoParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1378,7 +2288,7 @@ public class GoParser implements GoParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1388,7 +2298,7 @@ public class GoParser implements GoParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1503,12 +2413,12 @@ public class GoParser implements GoParserConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[59];
+    boolean[] la1tokens = new boolean[77];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 32; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1517,10 +2427,13 @@ public class GoParser implements GoParserConstants {
           if ((jj_la1_1[i] & (1<<j)) != 0) {
             la1tokens[32+j] = true;
           }
+          if ((jj_la1_2[i] & (1<<j)) != 0) {
+            la1tokens[64+j] = true;
+          }
         }
       }
     }
-    for (int i = 0; i < 59; i++) {
+    for (int i = 0; i < 77; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
@@ -1547,7 +2460,7 @@ public class GoParser implements GoParserConstants {
 
   static private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 8; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -1562,8 +2475,6 @@ public class GoParser implements GoParserConstants {
             case 5: jj_3_6(); break;
             case 6: jj_3_7(); break;
             case 7: jj_3_8(); break;
-            case 8: jj_3_9(); break;
-            case 9: jj_3_10(); break;
           }
         }
         p = p.next;

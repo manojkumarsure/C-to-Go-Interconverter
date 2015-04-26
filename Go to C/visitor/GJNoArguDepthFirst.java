@@ -14,6 +14,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    //
    // Auto class visitors--probably don't need to be overridden.
    //
+   int inFor = 0;
    public R visit(NodeList n) {
       R _ret=null;
       int _count=0;
@@ -61,6 +62,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    // User-generated visitor methods below
    //
 
+  
    /**
     * f0 -> Packages()
     * f1 -> Imports()
@@ -69,6 +71,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     */
    public R visit(Goal n) {
       R _ret=null;
+      System.out.println("#include<stdio.h>");
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -77,10 +80,31 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
+    * f0 -> PackageOther()
+    *       | PackageMain()
+    */
+   public R visit(Packages n) {
+      R _ret=null;
+      n.f0.accept(this);
+      return _ret;
+   }
+
+   /**
     * f0 -> "package"
     * f1 -> Identifier()
     */
-   public R visit(Packages n) {
+   public R visit(PackageOther n) {
+      R _ret=null;
+      n.f0.accept(this);
+//       n.f1.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "package"
+    * f1 -> "main"
+    */
+   public R visit(PackageMain n) {
       R _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
@@ -88,12 +112,77 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
-    * f0 -> "import" "\"" Identifier() "\""
-    *       | "import" "(" ( "\"" Identifier() "\"" )* ")"
+    * f0 -> SingleImport()
+    *       | MultipleImport()
     */
    public R visit(Imports n) {
       R _ret=null;
       n.f0.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "import"
+    * f1 -> "\""
+    * f2 -> Identifier()
+    * f3 -> "\""
+    */
+   public R visit(SingleImport n) {
+      R _ret=null;
+      n.f0.accept(this);
+      n.f1.accept(this);
+//       n.f2.accept(this);
+      n.f3.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "import"
+    * f1 -> "("
+    * f2 -> ( "\"" Identifier() "\"" )*
+    * f3 -> ")"
+    */
+   public R visit(MultipleImport n) {
+      R _ret=null;
+      n.f0.accept(this);
+      n.f1.accept(this);
+//       n.f2.accept(this);
+      n.f3.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> MainFunctionDeclaration()
+    *       | OtherFunctionDeclaration()
+    */
+   public R visit(FunctionDeclaration n) {
+      R _ret=null;
+      n.f0.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "func"
+    * f1 -> "main"
+    * f2 -> "("
+    * f3 -> ")"
+    * f4 -> "{"
+    * f5 -> ( VarDeclaration() )*
+    * f6 -> ( Statement() )*
+    * f7 -> "}"
+    */
+   public R visit(MainFunctionDeclaration n) {
+      R _ret=null;
+      System.out.println("main() {");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      n.f3.accept(this);
+      n.f4.accept(this);
+      n.f5.accept(this);
+      n.f6.accept(this);
+      n.f7.accept(this);
+      System.out.println("}");
       return _ret;
    }
 
@@ -105,26 +194,44 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     * f4 -> "{"
     * f5 -> ( VarDeclaration() )*
     * f6 -> ( Statement() )*
-    * f7 -> [ "return" Expression() ]
+    * f7 -> [ ReturnExpression() ]
     * f8 -> "}"
     */
-   public R visit(FunctionDeclaration n) {
+   public R visit(OtherFunctionDeclaration n) {
       R _ret=null;
+      System.out.print("int ");
       n.f0.accept(this);
       n.f1.accept(this);
+      System.out.print("(");
       n.f2.accept(this);
+      System.out.print(")");
       n.f3.accept(this);
+      System.out.println("{");
       n.f4.accept(this);
       n.f5.accept(this);
       n.f6.accept(this);
       n.f7.accept(this);
       n.f8.accept(this);
+      System.out.println("}");
+      return _ret;
+   }
+
+   /**
+    * f0 -> "return"
+    * f1 -> Expression()
+    */
+   public R visit(ReturnExpression n) {
+      R _ret=null;
+      System.out.print("return ");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      System.out.println(";");
       return _ret;
    }
 
    /**
     * f0 -> "("
-    * f1 -> [ Identifier() [ Type() ] ( "," Identifier() [ Type() ] )* ]
+    * f1 -> [ VarType() ( CommaVarType() )* ]
     * f2 -> ")"
     */
    public R visit(Signature n) {
@@ -132,6 +239,30 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> Type()
+    */
+   public R visit(VarType n) {
+      R _ret=null;
+      System.out.print("int ");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> ","
+    * f1 -> VarType()
+    */
+   public R visit(CommaVarType n) {
+      R _ret=null;
+      System.out.print(",");
+      n.f0.accept(this);
+      n.f1.accept(this);
       return _ret;
    }
 
@@ -150,21 +281,31 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    public R visit(Identifier n) {
       R _ret=null;
       n.f0.accept(this);
+      System.out.print(n.f0.toString());
       return _ret;
    }
 
    /**
-    * f0 -> Block()
-    *       | AssignmentStatement()
+    * f0 -> PrintStatement()
+    *       | Block()
     *       | IfStatement()
     *       | WhileStatement()
     *       | ForStatement()
-    *       | PrintStatement()
+    *       | AssignmentStatement()
+    *       | Expression()
     */
    public R visit(Statement n) {
       R _ret=null;
+      int temp = inFor;
+      if(inFor == 1){
+			inFor = 0;
+		}
+	  
       n.f0.accept(this);
-      return _ret;
+      inFor = temp;
+      if((n.f0.which == 0 || n.f0.which == 5 || n.f0.which == 6) && inFor==0)
+			System.out.println(";");
+	  return _ret;
    }
 
    /**
@@ -175,31 +316,47 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     */
    public R visit(Block n) {
       R _ret=null;
+      System.out.println("{");
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      System.out.println("}");
       return _ret;
    }
 
    /**
     * f0 -> "var"
     * f1 -> Identifier()
-    * f2 -> ( "," Identifier() )*
+    * f2 -> ( CommaIdentifier() )*
     * f3 -> Type()
     */
    public R visit(VarDeclaration n) {
       R _ret=null;
+      System.out.print("int ");
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      System.out.println(";");
       return _ret;
    }
 
    /**
-    * f0 -> Identifier()
-    * f1 -> "="
+    * f0 -> ","
+    * f1 -> Identifier()
+    */
+   public R visit(CommaIdentifier n) {
+      R _ret=null;
+      System.out.print(", ");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> AssignmentOperator()
     * f2 -> Expression()
     */
    public R visit(AssignmentStatement n) {
@@ -211,77 +368,109 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
+    * f0 -> "="
+    *       | "*="
+    *       | "/="
+    *       | "%="
+    *       | "+="
+    *       | "-="
+    *       | "<<="
+    *       | ">>="
+    *       | "&="
+    *       | "^="
+    *       | "|="
+    */
+   public R visit(AssignmentOperator n) {
+      R _ret=null;
+      n.f0.accept(this);
+      switch(n.f0.which) {
+      case 0: System.out.print("=");break;
+      case 1: System.out.print("*=");break;
+      case 2: System.out.print("/=");break;
+      case 3: System.out.print("%=");break;
+      case 4: System.out.print("+=");break;
+      case 5: System.out.print("-=");break;
+      case 6: System.out.print("<<=");break;
+      case 7: System.out.print(">>=");break;
+      case 8: System.out.print("^=");break;
+      case 9: System.out.print("|=");break;
+      }
+      return _ret;
+   }
+
+   /**
     * f0 -> "if"
     * f1 -> Expression()
     * f2 -> Statement()
-    * f3 -> [ "else" Statement() ]
+    * f3 -> [ ElseStatement() ]
     */
    public R visit(IfStatement n) {
       R _ret=null;
       n.f0.accept(this);
+      System.out.print("if (");
       n.f1.accept(this);
+      System.out.println(")");
       n.f2.accept(this);
       n.f3.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "else"
+    * f1 -> Statement()
+    */
+   public R visit(ElseStatement n) {
+      R _ret=null;
+      System.out.print(" else ");
+      n.f0.accept(this);
+      n.f1.accept(this);
       return _ret;
    }
 
    /**
     * f0 -> "while"
     * f1 -> Expression()
-    * f2 -> "{"
-    * f3 -> Statement()
-    * f4 -> "}"
+    * f2 -> Statement()
     */
    public R visit(WhileStatement n) {
       R _ret=null;
+      System.out.print(" while (");
       n.f0.accept(this);
       n.f1.accept(this);
+      System.out.println(")");
       n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
       return _ret;
    }
-
    /**
     * f0 -> "for"
     * f1 -> [ AssignmentStatement() ]
     * f2 -> ";"
     * f3 -> [ Expression() ]
     * f4 -> ";"
-    * f5 -> [ AssignmentStatement() | IncrementStatement() ]
-    * f6 -> "{"
-    * f7 -> Statement()
-    * f8 -> "}"
+    * f5 -> [ Statement() ]
+    * f6 -> Statement()
     */
    public R visit(ForStatement n) {
       R _ret=null;
       n.f0.accept(this);
+      System.out.print("for (");
       n.f1.accept(this);
       n.f2.accept(this);
+      System.out.print(";");
       n.f3.accept(this);
       n.f4.accept(this);
+      System.out.print(";");
+      inFor  = 1;
       n.f5.accept(this);
+      inFor = 0;
+      System.out.println(")");
       n.f6.accept(this);
-      n.f7.accept(this);
-      n.f8.accept(this);
       return _ret;
    }
 
    /**
-    * f0 -> "++" Identifier()
-    *       | "--" Identifier()
-    *       | Identifier() "++"
-    *       | Identifier() "--"
-    */
-   public R visit(IncrementStatement n) {
-      R _ret=null;
-      n.f0.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> "fmt.Println" "(" Expression() ")"
-    *       | "fmt.Printf" "(" Expression() ")"
+    * f0 -> PrintlnStatement()
+    *       | PrintfStatement()
     */
    public R visit(PrintStatement n) {
       R _ret=null;
@@ -290,106 +479,257 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
-    * f0 -> AndExpression()
-    *       | CompareExpression()
-    *       | EqualityExpression()
-    *       | PlusExpression()
-    *       | MinusExpression()
-    *       | TimesExpression()
-    *       | PrimaryExpression()
+    * f0 -> "fmt.Println"
+    * f1 -> StringPrint()
+    */
+   public R visit(PrintlnStatement n) {
+      R _ret=null;
+      System.out.print("printf(");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      System.out.println("printf(\"\\n\");");
+      return _ret;
+   }
+
+   /**
+    * f0 -> "fmt.Printf"
+    * f1 -> StringPrint()
+    */
+   public R visit(PrintfStatement n) {
+      R _ret=null;
+      System.out.print("printf");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> StringMsg()
+    * f2 -> ( CommaExpression() )*
+    * f3 -> ")"
+    */
+   public R visit(StringPrint n) {
+      R _ret=null;
+      System.out.print("(");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      n.f3.accept(this);
+      System.out.print(")");
+      return _ret;
+   }
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> [ Operator() Expression() ]
     */
    public R visit(Expression n) {
       R _ret=null;
       n.f0.accept(this);
+      n.f1.accept(this);
       return _ret;
    }
 
    /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "&"
-    * f2 -> PrimaryExpression()
+    * f0 -> "+"
+    *       | "-"
+    *       | "*"
+    *       | "/"
+    *       | "%"
+    *       | "<"
+    *       | ">"
+    *       | "=="
+    *       | ">="
+    *       | "<="
+    *       | "!="
+    *       | ">>"
+    *       | "<<"
+    *       | "&"
+    *       | "&&"
+    *       | "|"
+    *       | "||"
+    *       | "^"
+    *       | "^="
+    *       | "&="
+    *       | "|="
     */
-   public R visit(AndExpression n) {
+   public R visit(Operator n) {
       R _ret=null;
       n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "<"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(CompareExpression n) {
-      R _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "=="
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(EqualityExpression n) {
-      R _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "+"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(PlusExpression n) {
-      R _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "-"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(MinusExpression n) {
-      R _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "*"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(TimesExpression n) {
-      R _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      switch(n.f0.which) {
+      case 0:System.out.print("+");break;
+      case 1:System.out.print("-");break;
+      case 2:System.out.print("*");break;
+      case 3:System.out.print("/");break;
+      case 4:System.out.print("%");break;
+      case 5:System.out.print("<");break;
+      case 6:System.out.print(">");break;
+      case 7:System.out.print("==");break;
+      case 8:System.out.print(">=");break;
+      case 9:System.out.print("<=");break;
+      case 10:System.out.print("!=");break;
+      case 11:System.out.print(">>");break;
+      case 12:System.out.print("<<");break;
+      case 13:System.out.print("&");break;
+      case 14:System.out.print("&&");break;
+      case 15:System.out.print("|");break;
+      case 16:System.out.print("||");break;
+      case 17:System.out.print("^");break;
+      case 18:System.out.print("^=");break;
+      case 19:System.out.print("&=");break;
+      case 20:System.out.print("|=");break;
+      }
       return _ret;
    }
 
    /**
     * f0 -> IntegerLiteral()
+    *       | Identifier() PostfixExpression()
+    *       | BracketExpression() ")"
+    *       | StringMsg()
     *       | Identifier()
-    *       | BracketExpression()
     */
    public R visit(PrimaryExpression n) {
       R _ret=null;
       n.f0.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> ArrayAccessExpression()
+    *       | FunctionArgumentExpression()
+    *       | Increment()
+    *       | Decrement()
+    */
+   public R visit(PostfixExpression n) {
+      R _ret=null;
+      n.f0.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "++"
+    */
+   public R visit(Increment n) {
+      R _ret=null;
+      n.f0.accept(this);
+      System.out.print("++");
+      return _ret;
+   }
+
+   /**
+    * f0 -> "--"
+    */
+   public R visit(Decrement n) {
+      R _ret=null;
+      n.f0.accept(this);
+      System.out.print("--");
+      return _ret;
+   }
+
+   /**
+    * f0 -> ( SingleArrayAccessExpression() )+
+    */
+   public R visit(ArrayAccessExpression n) {
+      R _ret=null;
+      n.f0.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "["
+    * f1 -> Expression()
+    * f2 -> "]"
+    */
+   public R visit(SingleArrayAccessExpression n) {
+      R _ret=null;
+      System.out.print("[");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      System.out.print("]");
+      return _ret;
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> [ ArgumentExpressionList() ]
+    * f2 -> ")"
+    */
+   public R visit(FunctionArgumentExpression n) {
+      R _ret=null;
+      System.out.print("(");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      System.out.print(")");
+      return _ret;
+   }
+
+   /**
+    * f0 -> Expression()
+    * f1 -> ( CommaExpression() )*
+    */
+   public R visit(ArgumentExpressionList n) {
+      R _ret=null;
+      n.f0.accept(this);
+      n.f1.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> ","
+    * f1 -> Expression()
+    */
+   public R visit(CommaExpression n) {
+      R _ret=null;
+      n.f0.accept(this);
+      System.out.print(", ");
+      n.f1.accept(this);
+      return _ret;
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> Expression()
+    */
+   public R visit(BracketExpression n) {
+      R _ret=null;
+      System.out.print("(");
+      n.f0.accept(this);
+      n.f1.accept(this);
+      System.out.print(")");
+      return _ret;
+   }
+
+   /**
+    * f0 -> "\""
+    * f1 -> ( SubStrinMsg() )*
+    * f2 -> "\""
+    */
+   public R visit(StringMsg n) {
+      R _ret=null;
+      n.f0.accept(this);
+      System.out.print("\"");
+      n.f1.accept(this);
+      n.f2.accept(this);
+      System.out.print("\"");
+      return _ret;
+   }
+
+   /**
+    * f0 -> Identifier()
+    *       | "."
+    *       | Operator()
+    *       | ","
+    *       | "\\"
+    */
+   public R visit(SubStrinMsg n) {
+      R _ret=null;
+      n.f0.accept(this);
+      if(n.f0.which == 1 || n.f0.which == 3 || n.f0.which == 4)
+		System.out.print(n.f0.choice.toString());
       return _ret;
    }
 
@@ -399,19 +739,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    public R visit(IntegerLiteral n) {
       R _ret=null;
       n.f0.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> "("
-    * f1 -> Expression()
-    * f2 -> ")"
-    */
-   public R visit(BracketExpression n) {
-      R _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      System.out.print(n.f0.toString());
       return _ret;
    }
 

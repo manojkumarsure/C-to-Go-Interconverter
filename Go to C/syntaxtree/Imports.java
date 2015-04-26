@@ -6,8 +6,8 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> "import" "\"" Identifier() "\""
- *       | "import" "(" ( "\"" Identifier() "\"" )* ")"
+ * f0 -> SingleImport()
+ *       | MultipleImport()
  */
 public class Imports implements Node {
    public NodeChoice f0;

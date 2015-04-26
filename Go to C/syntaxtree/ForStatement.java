@@ -11,10 +11,8 @@ package syntaxtree;
  * f2 -> ";"
  * f3 -> [ Expression() ]
  * f4 -> ";"
- * f5 -> [ AssignmentStatement() | IncrementStatement() ]
- * f6 -> "{"
- * f7 -> Statement()
- * f8 -> "}"
+ * f5 -> [ Statement() ]
+ * f6 -> Statement()
  */
 public class ForStatement implements Node {
    public NodeToken f0;
@@ -23,11 +21,9 @@ public class ForStatement implements Node {
    public NodeOptional f3;
    public NodeToken f4;
    public NodeOptional f5;
-   public NodeToken f6;
-   public Statement f7;
-   public NodeToken f8;
+   public Statement f6;
 
-   public ForStatement(NodeToken n0, NodeOptional n1, NodeToken n2, NodeOptional n3, NodeToken n4, NodeOptional n5, NodeToken n6, Statement n7, NodeToken n8) {
+   public ForStatement(NodeToken n0, NodeOptional n1, NodeToken n2, NodeOptional n3, NodeToken n4, NodeOptional n5, Statement n6) {
       f0 = n0;
       f1 = n1;
       f2 = n2;
@@ -35,8 +31,6 @@ public class ForStatement implements Node {
       f4 = n4;
       f5 = n5;
       f6 = n6;
-      f7 = n7;
-      f8 = n8;
    }
 
    public ForStatement(NodeOptional n0, NodeOptional n1, NodeOptional n2, Statement n3) {
@@ -46,9 +40,7 @@ public class ForStatement implements Node {
       f3 = n1;
       f4 = new NodeToken(";");
       f5 = n2;
-      f6 = new NodeToken("{");
-      f7 = n3;
-      f8 = new NodeToken("}");
+      f6 = n3;
    }
 
    public void accept(visitor.Visitor v) {

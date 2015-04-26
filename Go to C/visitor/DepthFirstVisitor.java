@@ -55,20 +55,92 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
+    * f0 -> PackageOther()
+    *       | PackageMain()
+    */
+   public void visit(Packages n) {
+      n.f0.accept(this);
+   }
+
+   /**
     * f0 -> "package"
     * f1 -> Identifier()
     */
-   public void visit(Packages n) {
+   public void visit(PackageOther n) {
       n.f0.accept(this);
       n.f1.accept(this);
    }
 
    /**
-    * f0 -> "import" "\"" Identifier() "\""
-    *       | "import" "(" ( "\"" Identifier() "\"" )* ")"
+    * f0 -> "package"
+    * f1 -> "main"
+    */
+   public void visit(PackageMain n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> SingleImport()
+    *       | MultipleImport()
     */
    public void visit(Imports n) {
       n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> "import"
+    * f1 -> "\""
+    * f2 -> Identifier()
+    * f3 -> "\""
+    */
+   public void visit(SingleImport n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      n.f3.accept(this);
+   }
+
+   /**
+    * f0 -> "import"
+    * f1 -> "("
+    * f2 -> ( "\"" Identifier() "\"" )*
+    * f3 -> ")"
+    */
+   public void visit(MultipleImport n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      n.f3.accept(this);
+   }
+
+   /**
+    * f0 -> MainFunctionDeclaration()
+    *       | OtherFunctionDeclaration()
+    */
+   public void visit(FunctionDeclaration n) {
+      n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> "func"
+    * f1 -> "main"
+    * f2 -> "("
+    * f3 -> ")"
+    * f4 -> "{"
+    * f5 -> ( VarDeclaration() )*
+    * f6 -> ( Statement() )*
+    * f7 -> "}"
+    */
+   public void visit(MainFunctionDeclaration n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      n.f3.accept(this);
+      n.f4.accept(this);
+      n.f5.accept(this);
+      n.f6.accept(this);
+      n.f7.accept(this);
    }
 
    /**
@@ -79,10 +151,10 @@ public class DepthFirstVisitor implements Visitor {
     * f4 -> "{"
     * f5 -> ( VarDeclaration() )*
     * f6 -> ( Statement() )*
-    * f7 -> [ "return" Expression() ]
+    * f7 -> [ ReturnExpression() ]
     * f8 -> "}"
     */
-   public void visit(FunctionDeclaration n) {
+   public void visit(OtherFunctionDeclaration n) {
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -95,14 +167,41 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
+    * f0 -> "return"
+    * f1 -> Expression()
+    */
+   public void visit(ReturnExpression n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
     * f0 -> "("
-    * f1 -> [ Identifier() [ Type() ] ( "," Identifier() [ Type() ] )* ]
+    * f1 -> [ VarType() ( CommaVarType() )* ]
     * f2 -> ")"
     */
    public void visit(Signature n) {
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+   }
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> Type()
+    */
+   public void visit(VarType n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> ","
+    * f1 -> VarType()
+    */
+   public void visit(CommaVarType n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
    }
 
    /**
@@ -120,12 +219,13 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
-    * f0 -> Block()
-    *       | AssignmentStatement()
+    * f0 -> PrintStatement()
+    *       | Block()
     *       | IfStatement()
     *       | WhileStatement()
     *       | ForStatement()
-    *       | PrintStatement()
+    *       | AssignmentStatement()
+    *       | Expression()
     */
    public void visit(Statement n) {
       n.f0.accept(this);
@@ -147,7 +247,7 @@ public class DepthFirstVisitor implements Visitor {
    /**
     * f0 -> "var"
     * f1 -> Identifier()
-    * f2 -> ( "," Identifier() )*
+    * f2 -> ( CommaIdentifier() )*
     * f3 -> Type()
     */
    public void visit(VarDeclaration n) {
@@ -158,8 +258,17 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
-    * f0 -> Identifier()
-    * f1 -> "="
+    * f0 -> ","
+    * f1 -> Identifier()
+    */
+   public void visit(CommaIdentifier n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> AssignmentOperator()
     * f2 -> Expression()
     */
    public void visit(AssignmentStatement n) {
@@ -169,10 +278,27 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
+    * f0 -> "="
+    *       | "*="
+    *       | "/="
+    *       | "%="
+    *       | "+="
+    *       | "-="
+    *       | "<<="
+    *       | ">>="
+    *       | "&="
+    *       | "^="
+    *       | "|="
+    */
+   public void visit(AssignmentOperator n) {
+      n.f0.accept(this);
+   }
+
+   /**
     * f0 -> "if"
     * f1 -> Expression()
     * f2 -> Statement()
-    * f3 -> [ "else" Statement() ]
+    * f3 -> [ ElseStatement() ]
     */
    public void visit(IfStatement n) {
       n.f0.accept(this);
@@ -182,18 +308,23 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
+    * f0 -> "else"
+    * f1 -> Statement()
+    */
+   public void visit(ElseStatement n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
     * f0 -> "while"
     * f1 -> Expression()
-    * f2 -> "{"
-    * f3 -> Statement()
-    * f4 -> "}"
+    * f2 -> Statement()
     */
    public void visit(WhileStatement n) {
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
    }
 
    /**
@@ -202,10 +333,8 @@ public class DepthFirstVisitor implements Visitor {
     * f2 -> ";"
     * f3 -> [ Expression() ]
     * f4 -> ";"
-    * f5 -> [ AssignmentStatement() | IncrementStatement() ]
-    * f6 -> "{"
-    * f7 -> Statement()
-    * f8 -> "}"
+    * f5 -> [ Statement() ]
+    * f6 -> Statement()
     */
    public void visit(ForStatement n) {
       n.f0.accept(this);
@@ -215,113 +344,193 @@ public class DepthFirstVisitor implements Visitor {
       n.f4.accept(this);
       n.f5.accept(this);
       n.f6.accept(this);
-      n.f7.accept(this);
-      n.f8.accept(this);
    }
 
    /**
-    * f0 -> "++" Identifier()
-    *       | "--" Identifier()
-    *       | Identifier() "++"
-    *       | Identifier() "--"
-    */
-   public void visit(IncrementStatement n) {
-      n.f0.accept(this);
-   }
-
-   /**
-    * f0 -> "fmt.Println" "(" Expression() ")"
-    *       | "fmt.Printf" "(" Expression() ")"
+    * f0 -> PrintlnStatement()
+    *       | PrintfStatement()
     */
    public void visit(PrintStatement n) {
       n.f0.accept(this);
    }
 
    /**
-    * f0 -> AndExpression()
-    *       | CompareExpression()
-    *       | EqualityExpression()
-    *       | PlusExpression()
-    *       | MinusExpression()
-    *       | TimesExpression()
-    *       | PrimaryExpression()
+    * f0 -> "fmt.Println"
+    * f1 -> StringPrint()
+    */
+   public void visit(PrintlnStatement n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> "fmt.Printf"
+    * f1 -> StringPrint()
+    */
+   public void visit(PrintfStatement n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> StringMsg()
+    * f2 -> ( CommaExpression() )*
+    * f3 -> ")"
+    */
+   public void visit(StringPrint n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+      n.f3.accept(this);
+   }
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> [ Operator() Expression() ]
     */
    public void visit(Expression n) {
       n.f0.accept(this);
+      n.f1.accept(this);
    }
 
    /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "&"
-    * f2 -> PrimaryExpression()
+    * f0 -> "+"
+    *       | "-"
+    *       | "*"
+    *       | "/"
+    *       | "%"
+    *       | "<"
+    *       | ">"
+    *       | "=="
+    *       | ">="
+    *       | "<="
+    *       | "!="
+    *       | ">>"
+    *       | "<<"
+    *       | "&"
+    *       | "&&"
+    *       | "|"
+    *       | "||"
+    *       | "^"
+    *       | "^="
+    *       | "&="
+    *       | "|="
     */
-   public void visit(AndExpression n) {
+   public void visit(Operator n) {
       n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "<"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(CompareExpression n) {
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "=="
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(EqualityExpression n) {
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "+"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(PlusExpression n) {
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "-"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(MinusExpression n) {
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-   }
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "*"
-    * f2 -> PrimaryExpression()
-    */
-   public void visit(TimesExpression n) {
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
    }
 
    /**
     * f0 -> IntegerLiteral()
+    *       | Identifier() PostfixExpression()
+    *       | BracketExpression() ")"
+    *       | StringMsg()
     *       | Identifier()
-    *       | BracketExpression()
     */
    public void visit(PrimaryExpression n) {
+      n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> ArrayAccessExpression()
+    *       | FunctionArgumentExpression()
+    *       | Increment()
+    *       | Decrement()
+    */
+   public void visit(PostfixExpression n) {
+      n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> "++"
+    */
+   public void visit(Increment n) {
+      n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> "--"
+    */
+   public void visit(Decrement n) {
+      n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> ( SingleArrayAccessExpression() )+
+    */
+   public void visit(ArrayAccessExpression n) {
+      n.f0.accept(this);
+   }
+
+   /**
+    * f0 -> "["
+    * f1 -> Expression()
+    * f2 -> "]"
+    */
+   public void visit(SingleArrayAccessExpression n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> [ ArgumentExpressionList() ]
+    * f2 -> ")"
+    */
+   public void visit(FunctionArgumentExpression n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+   }
+
+   /**
+    * f0 -> Expression()
+    * f1 -> ( CommaExpression() )*
+    */
+   public void visit(ArgumentExpressionList n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> ","
+    * f1 -> Expression()
+    */
+   public void visit(CommaExpression n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> "("
+    * f1 -> Expression()
+    */
+   public void visit(BracketExpression n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+   }
+
+   /**
+    * f0 -> "\""
+    * f1 -> ( SubStrinMsg() )*
+    * f2 -> "\""
+    */
+   public void visit(StringMsg n) {
+      n.f0.accept(this);
+      n.f1.accept(this);
+      n.f2.accept(this);
+   }
+
+   /**
+    * f0 -> Identifier()
+    *       | "."
+    *       | Operator()
+    *       | ","
+    *       | "\\"
+    */
+   public void visit(SubStrinMsg n) {
       n.f0.accept(this);
    }
 
@@ -330,17 +539,6 @@ public class DepthFirstVisitor implements Visitor {
     */
    public void visit(IntegerLiteral n) {
       n.f0.accept(this);
-   }
-
-   /**
-    * f0 -> "("
-    * f1 -> Expression()
-    * f2 -> ")"
-    */
-   public void visit(BracketExpression n) {
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
    }
 
 }

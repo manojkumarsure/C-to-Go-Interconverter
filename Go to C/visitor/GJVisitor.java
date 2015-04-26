@@ -35,16 +35,62 @@ public interface GJVisitor<R,A> {
    public R visit(Goal n, A argu);
 
    /**
-    * f0 -> "package"
-    * f1 -> Identifier()
+    * f0 -> PackageOther()
+    *       | PackageMain()
     */
    public R visit(Packages n, A argu);
 
    /**
-    * f0 -> "import" "\"" Identifier() "\""
-    *       | "import" "(" ( "\"" Identifier() "\"" )* ")"
+    * f0 -> "package"
+    * f1 -> Identifier()
+    */
+   public R visit(PackageOther n, A argu);
+
+   /**
+    * f0 -> "package"
+    * f1 -> "main"
+    */
+   public R visit(PackageMain n, A argu);
+
+   /**
+    * f0 -> SingleImport()
+    *       | MultipleImport()
     */
    public R visit(Imports n, A argu);
+
+   /**
+    * f0 -> "import"
+    * f1 -> "\""
+    * f2 -> Identifier()
+    * f3 -> "\""
+    */
+   public R visit(SingleImport n, A argu);
+
+   /**
+    * f0 -> "import"
+    * f1 -> "("
+    * f2 -> ( "\"" Identifier() "\"" )*
+    * f3 -> ")"
+    */
+   public R visit(MultipleImport n, A argu);
+
+   /**
+    * f0 -> MainFunctionDeclaration()
+    *       | OtherFunctionDeclaration()
+    */
+   public R visit(FunctionDeclaration n, A argu);
+
+   /**
+    * f0 -> "func"
+    * f1 -> "main"
+    * f2 -> "("
+    * f3 -> ")"
+    * f4 -> "{"
+    * f5 -> ( VarDeclaration() )*
+    * f6 -> ( Statement() )*
+    * f7 -> "}"
+    */
+   public R visit(MainFunctionDeclaration n, A argu);
 
    /**
     * f0 -> "func"
@@ -54,17 +100,35 @@ public interface GJVisitor<R,A> {
     * f4 -> "{"
     * f5 -> ( VarDeclaration() )*
     * f6 -> ( Statement() )*
-    * f7 -> [ "return" Expression() ]
+    * f7 -> [ ReturnExpression() ]
     * f8 -> "}"
     */
-   public R visit(FunctionDeclaration n, A argu);
+   public R visit(OtherFunctionDeclaration n, A argu);
+
+   /**
+    * f0 -> "return"
+    * f1 -> Expression()
+    */
+   public R visit(ReturnExpression n, A argu);
 
    /**
     * f0 -> "("
-    * f1 -> [ Identifier() [ Type() ] ( "," Identifier() [ Type() ] )* ]
+    * f1 -> [ VarType() ( CommaVarType() )* ]
     * f2 -> ")"
     */
    public R visit(Signature n, A argu);
+
+   /**
+    * f0 -> Identifier()
+    * f1 -> Type()
+    */
+   public R visit(VarType n, A argu);
+
+   /**
+    * f0 -> ","
+    * f1 -> VarType()
+    */
+   public R visit(CommaVarType n, A argu);
 
    /**
     * f0 -> "int"
@@ -77,12 +141,13 @@ public interface GJVisitor<R,A> {
    public R visit(Identifier n, A argu);
 
    /**
-    * f0 -> Block()
-    *       | AssignmentStatement()
+    * f0 -> PrintStatement()
+    *       | Block()
     *       | IfStatement()
     *       | WhileStatement()
     *       | ForStatement()
-    *       | PrintStatement()
+    *       | AssignmentStatement()
+    *       | Expression()
     */
    public R visit(Statement n, A argu);
 
@@ -97,32 +162,57 @@ public interface GJVisitor<R,A> {
    /**
     * f0 -> "var"
     * f1 -> Identifier()
-    * f2 -> ( "," Identifier() )*
+    * f2 -> ( CommaIdentifier() )*
     * f3 -> Type()
     */
    public R visit(VarDeclaration n, A argu);
 
    /**
-    * f0 -> Identifier()
-    * f1 -> "="
+    * f0 -> ","
+    * f1 -> Identifier()
+    */
+   public R visit(CommaIdentifier n, A argu);
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> AssignmentOperator()
     * f2 -> Expression()
     */
    public R visit(AssignmentStatement n, A argu);
 
    /**
+    * f0 -> "="
+    *       | "*="
+    *       | "/="
+    *       | "%="
+    *       | "+="
+    *       | "-="
+    *       | "<<="
+    *       | ">>="
+    *       | "&="
+    *       | "^="
+    *       | "|="
+    */
+   public R visit(AssignmentOperator n, A argu);
+
+   /**
     * f0 -> "if"
     * f1 -> Expression()
     * f2 -> Statement()
-    * f3 -> [ "else" Statement() ]
+    * f3 -> [ ElseStatement() ]
     */
    public R visit(IfStatement n, A argu);
 
    /**
+    * f0 -> "else"
+    * f1 -> Statement()
+    */
+   public R visit(ElseStatement n, A argu);
+
+   /**
     * f0 -> "while"
     * f1 -> Expression()
-    * f2 -> "{"
-    * f3 -> Statement()
-    * f4 -> "}"
+    * f2 -> Statement()
     */
    public R visit(WhileStatement n, A argu);
 
@@ -132,97 +222,151 @@ public interface GJVisitor<R,A> {
     * f2 -> ";"
     * f3 -> [ Expression() ]
     * f4 -> ";"
-    * f5 -> [ AssignmentStatement() | IncrementStatement() ]
-    * f6 -> "{"
-    * f7 -> Statement()
-    * f8 -> "}"
+    * f5 -> [ Statement() ]
+    * f6 -> Statement()
     */
    public R visit(ForStatement n, A argu);
 
    /**
-    * f0 -> "++" Identifier()
-    *       | "--" Identifier()
-    *       | Identifier() "++"
-    *       | Identifier() "--"
-    */
-   public R visit(IncrementStatement n, A argu);
-
-   /**
-    * f0 -> "fmt.Println" "(" Expression() ")"
-    *       | "fmt.Printf" "(" Expression() ")"
+    * f0 -> PrintlnStatement()
+    *       | PrintfStatement()
     */
    public R visit(PrintStatement n, A argu);
 
    /**
-    * f0 -> AndExpression()
-    *       | CompareExpression()
-    *       | EqualityExpression()
-    *       | PlusExpression()
-    *       | MinusExpression()
-    *       | TimesExpression()
-    *       | PrimaryExpression()
+    * f0 -> "fmt.Println"
+    * f1 -> StringPrint()
+    */
+   public R visit(PrintlnStatement n, A argu);
+
+   /**
+    * f0 -> "fmt.Printf"
+    * f1 -> StringPrint()
+    */
+   public R visit(PrintfStatement n, A argu);
+
+   /**
+    * f0 -> "("
+    * f1 -> StringMsg()
+    * f2 -> ( CommaExpression() )*
+    * f3 -> ")"
+    */
+   public R visit(StringPrint n, A argu);
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> [ Operator() Expression() ]
     */
    public R visit(Expression n, A argu);
 
    /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "&"
-    * f2 -> PrimaryExpression()
+    * f0 -> "+"
+    *       | "-"
+    *       | "*"
+    *       | "/"
+    *       | "%"
+    *       | "<"
+    *       | ">"
+    *       | "=="
+    *       | ">="
+    *       | "<="
+    *       | "!="
+    *       | ">>"
+    *       | "<<"
+    *       | "&"
+    *       | "&&"
+    *       | "|"
+    *       | "||"
+    *       | "^"
+    *       | "^="
+    *       | "&="
+    *       | "|="
     */
-   public R visit(AndExpression n, A argu);
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "<"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(CompareExpression n, A argu);
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "=="
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(EqualityExpression n, A argu);
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "+"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(PlusExpression n, A argu);
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "-"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(MinusExpression n, A argu);
-
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> "*"
-    * f2 -> PrimaryExpression()
-    */
-   public R visit(TimesExpression n, A argu);
+   public R visit(Operator n, A argu);
 
    /**
     * f0 -> IntegerLiteral()
+    *       | Identifier() PostfixExpression()
+    *       | BracketExpression() ")"
+    *       | StringMsg()
     *       | Identifier()
-    *       | BracketExpression()
     */
    public R visit(PrimaryExpression n, A argu);
+
+   /**
+    * f0 -> ArrayAccessExpression()
+    *       | FunctionArgumentExpression()
+    *       | Increment()
+    *       | Decrement()
+    */
+   public R visit(PostfixExpression n, A argu);
+
+   /**
+    * f0 -> "++"
+    */
+   public R visit(Increment n, A argu);
+
+   /**
+    * f0 -> "--"
+    */
+   public R visit(Decrement n, A argu);
+
+   /**
+    * f0 -> ( SingleArrayAccessExpression() )+
+    */
+   public R visit(ArrayAccessExpression n, A argu);
+
+   /**
+    * f0 -> "["
+    * f1 -> Expression()
+    * f2 -> "]"
+    */
+   public R visit(SingleArrayAccessExpression n, A argu);
+
+   /**
+    * f0 -> "("
+    * f1 -> [ ArgumentExpressionList() ]
+    * f2 -> ")"
+    */
+   public R visit(FunctionArgumentExpression n, A argu);
+
+   /**
+    * f0 -> Expression()
+    * f1 -> ( CommaExpression() )*
+    */
+   public R visit(ArgumentExpressionList n, A argu);
+
+   /**
+    * f0 -> ","
+    * f1 -> Expression()
+    */
+   public R visit(CommaExpression n, A argu);
+
+   /**
+    * f0 -> "("
+    * f1 -> Expression()
+    */
+   public R visit(BracketExpression n, A argu);
+
+   /**
+    * f0 -> "\""
+    * f1 -> ( SubStrinMsg() )*
+    * f2 -> "\""
+    */
+   public R visit(StringMsg n, A argu);
+
+   /**
+    * f0 -> Identifier()
+    *       | "."
+    *       | Operator()
+    *       | ","
+    *       | "\\"
+    */
+   public R visit(SubStrinMsg n, A argu);
 
    /**
     * f0 -> <INTEGER_LITERAL>
     */
    public R visit(IntegerLiteral n, A argu);
-
-   /**
-    * f0 -> "("
-    * f1 -> Expression()
-    * f2 -> ")"
-    */
-   public R visit(BracketExpression n, A argu);
 
 }

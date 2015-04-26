@@ -6,8 +6,8 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> "fmt.Println" "(" Expression() ")"
- *       | "fmt.Printf" "(" Expression() ")"
+ * f0 -> PrintlnStatement()
+ *       | PrintfStatement()
  */
 public class PrintStatement implements Node {
    public NodeChoice f0;

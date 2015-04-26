@@ -9,7 +9,7 @@ package syntaxtree;
  * f0 -> "if"
  * f1 -> Expression()
  * f2 -> Statement()
- * f3 -> [ "else" Statement() ]
+ * f3 -> [ ElseStatement() ]
  */
 public class IfStatement implements Node {
    public NodeToken f0;
